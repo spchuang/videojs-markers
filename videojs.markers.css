@@ -1,0 +1,26 @@
+/* a wrapper element that tracks the mouse vertically */
+.vjs-marker-holder {
+  position: absolute;
+}
+
+/* the markers image itself */
+.vjs-marker {
+  position: absolute;
+  left: 0;
+  bottom: 0em;
+  opacity: 1;
+
+  transition: opacity .2s ease;
+  -webkit-transition: opacity .2s ease;
+  -moz-transition: opacity .2s ease;
+}
+
+/* fade in the thumbnail when hovering over the progress bar */
+.vjs-progress-control:hover .vjs-thumbnail {
+  opacity: 1;
+}
+
+/* ... but hide the thumbnail when hovering directly over it */
+.vjs-progress-control:hover .vjs-thumbnail:hover {
+  opacity: 0;
+}

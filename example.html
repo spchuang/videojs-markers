@@ -1,0 +1,52 @@
+
+</script>
+</body>
+</html>
+<!doctype html>
+<html>
+<head>
+  <title>Video.js Markers Example</title>
+  <link href="http://vjs.zencdn.net/4.0/video-js.css" rel="stylesheet">
+  <link href="videojs.markers.css" rel="stylesheet">
+  <style>
+    p {
+      background-color: #eee;
+      border: thin solid #777;
+      padding: 10px;
+    }
+  </style>
+
+</head>
+<body>
+
+<p></p>
+
+<video id='video' class='video-js vjs-default-skin' width='640' height='264' poster='http://videojs.com/img/poster.jpg' controls>
+ <source src="http://vjs.zencdn.net/v/oceans.mp4" type="video/mp4">
+ <source src="http://vjs.zencdn.net/v/oceans.webm" type="video/webm">
+</video>
+
+
+<script src="http://vjs.zencdn.net/4.0/video.js"></script>
+<script src='videojs.markers.js'></script>
+<script>
+// initialize video.js
+var video = videojs('video');
+
+
+video.markers({
+    0: {
+        time: '00:00:16',
+        style: {
+            width:'5px',
+            height: '5px',
+            'background-color': 'red',
+            'border-radius': '50%'
+          }
+  
+       }
+});
+
+</script>
+</body>
+</html>

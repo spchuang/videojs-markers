@@ -1,0 +1,8 @@
+{
+  "name": "videojs-thumbnails",
+  "description": "progress bar thumbnails plugin for video.js",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "video-js": "4.0"
+  }
+}
