@@ -1,106 +1,164 @@
 /*! videojs-markers !*/
 
 (function() {
+  //default 
   var defaults = {
-      0: {
-        time: '00:00:00',
-        style: {
-            width:'5px',
-            height: '5px',
-            'background-color': 'red',
-            'border-radius': '50%'
-          }
-      }
-    },
-    extend = function() {
-      var args, target, i, object, property;
-      args = Array.prototype.slice.call(arguments);
-      target = args.shift() || {};
-      for (i in args) {
-        object = args[i];
-        for (property in object) {
-          if (object.hasOwnProperty(property)) {
-            if (typeof object[property] === 'object') {
-              target[property] = extend(target[property], object[property]);
-            } else {
-              target[property] = object[property];
-            }
-          }
+      markerStyle:{
+        'width':'10px',
+        'border-radius': '40%',
+        'background-color': 'red'
+
+      },
+      breakOverlay:{
+        display: true,
+        display_time: 3,
+        default_text: "Break overlay",
+        style:{
+          'width':'100%',
+          'height': '20%',
+          'background-color': 'rgba(0,0,0,0.7)',
+          'color': 'white',
+          'font-size': '17px',
         }
+
+      },
+      markerTip:{
+        display: true,
+        default_text: "Break"
       }
-      return target;
+      
     };
+
 
   /**
-   * register the markers plugin
+   * register the markers plugin (dependent on jquery)
    */
   videojs.plugin('markers', function(options) {
-    var div, settings, marker, player, progressControl, duration;
-    settings = extend({}, defaults, options);
+    console.log("enter marker");
+    var marker_holder, player, setting, video_wrapper;
+   
+    
+    setting = $.extend(true, {}, defaults, options.setting);
+    console.log(this);
+    video_wrapper = $("#"+setting.videoID);
     player = this;
 
-    // create the markers element
-    div = document.createElement('div');
-    div.className = 'vjs-marker-holder';
-    marker = document.createElement('div');
-    div.appendChild(marker);
-    //img.src = settings['0'].src;
-    //calculate the time to seconds
-    var n = settings['0'].time.split(":");
+
+    var loadMarkers = function(){
+   
 
 
-    console.log(n);
+      console.log("creating markers");
+      var duration = player.duration();
 
-    marker.className = 'vjs-marker';
-    console.log(marker);
+      marker_holder = [];
 
-    //extend setting['0'] style to img element
-    extend(marker.style, settings['0'].style);
+      // create the each marker div
+      $.each(options.breaks, function(key,val){
 
+        var m_h, m, time, marker_time, pos;
+        //m_h = $("<div class='vjs-marker-holder' id='"+key+"'></div>");
+        m = $("<div class='vjs-marker'  id='"+key+"'></div>");
+        //m_h.append(m);
+
+        m.css(setting.markerStyle);
+     
+        m.css("margin-left", -parseFloat(m.css("width"))/2 +'px');  
+
+        //calculate the time to seconds, not gonna do error check
+        time = val.time.split(":");
+        if(time[3])
+          marker_time = parseInt(time[0])*3600+parseInt(time[1])*60+parseInt(time[2])+parseInt(time[3])*0.001;
+        else 
+          marker_time = parseInt(time[0])*3600+parseInt(time[1])*60+parseInt(time[2]);
+
+        video_wrapper.find('.vjs-progress-control').append(m);
+        pos = (marker_time/duration)*100;
+        // position the marker to correct time position 
+        m.css("left", pos +'%');  
+
+        marker_holder.push({div: m, time_in_second: marker_time, time: val.time, pos:pos});
+
+      });
+      console.log(marker_holder);
     
-    // center the marker over the cursor if an offset wasn't provided
-    if (!marker.style.left && !marker.style.right) {
-        marker.style.left = -(marker.width / 2) + 'px';
-    };
+      //bind click event to seek to marker time
+      video_wrapper.find('.vjs-marker').on('click', function(e){
+        marker_id = this.id;
+        player.currentTime(marker_holder[marker_id].time_in_second);
+      });
 
-    // keep track of the duration to calculate correct thumbnail to display
-    duration = player.duration();
-    player.on('durationchange', function(event) {
-      duration = player.duration();
-      console.log(duration);
-    });
 
-    // add the marker to the player
-    progressControl = player.controlBar.progressControl;
-    progressControl.el().appendChild(div);
+      if(setting.markerTip.display){
+        var marker_tip;
+         //create div for marker tip
+        console.log("creating marker tip");
+        marker_tip = $("<div class='vjs-tip'><div class='vjs-tip-arrow'></div><div class='vjs-tip-inner'></div></div>");
+        video_wrapper.find('.vjs-progress-control').append(marker_tip);
 
-    // update the thumbnail while hovering
-    /*
-    progressControl.el().addEventListener('mousemove', function(event) {
-      var mouseTime, time, active, left, setting;
-      active = 0;
+        //bind events to show marker tip
+        video_wrapper.find('.vjs-marker').on('mouseover', function(event){
+          var marker_id;
+          marker_id = this.id;
 
-      // find the page offset of the mouse
-      left = event.pageX || (event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft);
-      // subtract the page offset of the progress control
-      left -= progressControl.el().getBoundingClientRect().left + window.pageXOffset;
-      div.style.left = left + 'px';
+          marker_tip.find('.vjs-tip-inner').html(setting.markerTip.default_text + ": " + marker_holder[marker_id].time);
+    
 
-      // apply updated styles to the thumbnail if necessary
-      mouseTime = Math.floor(event.offsetX / progressControl.width() * duration);
-      for (time in settings) {
-        if (mouseTime > time) {
-          active = Math.max(active, time);
-        }
+          //margin left needs to minus the padding length
+          marker_tip.css({"left": marker_holder[marker_id].pos+'%',
+                          "margin-left": -parseFloat(marker_tip.css("width"))/2-5 +'px',
+                          "visibility": "visible"});
+          return;
+        }).on('mouseout',function(){
+          marker_tip.css("visibility", "hidden");
+        });
+
       }
-      setting = settings[active];
-      if (setting.src && img.src != setting.src) {
-        img.src = setting.src;
+      
+      if(setting.breakOverlay.display){
+        var break_overlay, ct, overlay_index;
+        //create div for break overlay
+        break_overlay = $("<div class='vjs-break-overlay'><div class='vjs-break-overlay-text'></div></div>");
+        break_overlay.css(setting.breakOverlay.style);
+        video_wrapper.append(break_overlay);
+        overlay_index = -1;
+
+        //bind timeupdate handle
+        player.on("timeupdate", function() {
+          ct = this.currentTime();
+          //first check if the playback is still within the same break period
+          if(overlay_index != -1){
+            if(ct < marker_holder[overlay_index].time_in_second || 
+               ct > (marker_holder[overlay_index].time_in_second+setting.breakOverlay.display_time)){
+              overlay_index = -1;
+              break_overlay.css("visibility", "hidden");
+            }
+              
+
+          }else{
+            //display overlay from marker.time_in_second till +breakOverlay.time
+            $.each(marker_holder, function(key, val){
+              if(ct >= val.time_in_second && ct <= (val.time_in_second+setting.breakOverlay.display_time)){
+                overlay_index = key;
+                break_overlay.find('.vjs-break-overlay-text').html(setting.breakOverlay.default_text + ": " + (overlay_index+1));
+    
+                break_overlay.css("visibility", "visible");
+                return false;
+              }
+
+            });
+
+          }
+
+
+        }, false);
+
       }
-      if (setting.style && img.style != setting.style) {
-        extend(img.style, setting.style);
-      }
-    }, false);
-*/
+    }
+    this.on("loadedmetadata", loadMarkers);
+
   });
+  
+
+
 })();
