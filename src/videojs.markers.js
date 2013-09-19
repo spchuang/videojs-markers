@@ -4,8 +4,8 @@
   //default setting
   var defaults = {
       markerStyle:{
-        'width':'10px',
-        'border-radius': '40%',
+        'width':'7px',
+        'border-radius': '30%',
         'background-color': 'red'
       },
       markerTip:{
