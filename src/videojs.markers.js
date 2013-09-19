@@ -33,7 +33,7 @@
   videojs.plugin('markers', function(options) {
     var marker_holder, player, setting, video_wrapper;
     setting = $.extend(true, {}, defaults, options.setting);
-    video_wrapper = $("#"+setting.videoID);
+    video_wrapper = $(this.el());
     player = this;
 
     var loadMarkers = function(){
