@@ -32,6 +32,7 @@ To add breaks in the video, simply add a new time (in seconds) in the list of br
     });
 
 Customize marker style: 
+
 The style of the marker could be modified by passing an optional setting "markerStyle" with your preference of css settings. 
 
     video.markers({
@@ -45,8 +46,9 @@ The style of the marker could be modified by passing an optional setting "marker
         breaks:[9.5, 16, 28, 36]
     });
 
-Advanced Usage: show overlaid text and customize markerTip
-In addition to displaying markers on the control bar, videojs-markers also show markerTip and overlaid text boxes when the video reaches the break points. Markertip is displayed by default while breakOverlay isn't.
+Advanced Usage: show overlaid text and customize markerTip.
+
+In addition to displaying markers on the control bar, videojs-markers also show markerTip and overlaid text boxes when the video reaches the break points. Markertip is displayed by default while breakOverlay isn't. The overlaid box could be styled and display any default text for any specified duration of time (in seconds).
 
 
     video.markers({
@@ -63,11 +65,8 @@ In addition to displaying markers on the control bar, videojs-markers also show 
           },
           breakOverlay:{
             display: true,
-            //display interval in seconds
             display_time: 3,
-
-            //display text
-            default_text: "This is an ad break ",
+            default_text: "This is an ad break ", 
 
             //overlaid box style
             style:{
@@ -78,13 +77,10 @@ In addition to displaying markers on the control bar, videojs-markers also show 
             }
           }
         },
-        //set break time
         breaks:[9.5, 16, 28, 36]
-        
-
     });
 
-Default setting:
+Default setting of videojs-markers:
 
     var defaults = {
       markerStyle:{
