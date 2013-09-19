@@ -3,11 +3,11 @@ Video.js Markers
 
 ![Alt text](https://raw.github.com/spchuang/videojs-markers/master/screenshot.png?login=spchuang&token=04240921c2bab624c9f5e778348c312f "Screen shot of videojs.markers")
 
-A plugin display customizable markers upon progress bars of the video with [Video.js](https://github.com/videojs/video.js/). This could be used to show video breaks and show overlaid text on the video when playback reaches the specific break points.
+A plugin that displays customizable markers upon progress bars of the video with [Video.js](https://github.com/videojs/video.js/). This could be used to show video breaks and show overlaid text on the video when playback reaches the specific break points.
 
 Using the Plugin
 ----------------
-Add the 'videojs.markers.js' plugin and stylesheet after include videojs script and jQuery library
+Add the 'videojs.markers.js' plugin and stylesheet after including videojs script and jQuery library
 
     <link href="http://vjs.zencdn.net/4.2/video-js.css" rel="stylesheet">
     <link href="videojs.markers.css" rel="stylesheet">
@@ -15,8 +15,9 @@ Add the 'videojs.markers.js' plugin and stylesheet after include videojs script 
     <script src="http://vjs.zencdn.net/4.2/video.js"></script>
     <script src='../src/videojs.markers.js'></script>
 
-Basic usage: display break markers in the video
-To add breaks in the video, simply add a new element in the list of breaks of the passed in option. Also note that the video id needs to be speified in the setting option. The time should be formatted as 'hh:mm:ss:ms' where millisecond is not required.
+Basic usage: display break markers in the video.
+
+To add breaks in the video, simply add a new element in the list of breaks of the passed in option. Also note that the video id needs to be speified in the setting option. The time should be formatted in seconds.
 
     // initialize video.js
     var video = videojs('test_video');
@@ -27,20 +28,7 @@ To add breaks in the video, simply add a new element in the list of breaks of th
           videoID: 'test_video'
         },
         //set break time
-        breaks:[
-          {
-            time: '00:00:9:700',
-          },
-          {
-            time: '00:00:16',
-          },
-          {
-            time: '00:00:28',
-          },
-          {
-            time: '00:00:36',
-          }
-      ]
+        breaks:[9.5, 16, 28, 36]
     });
 
 Customize marker style: 
@@ -51,22 +39,9 @@ The style of the marker could be modified by passing an optional setting "marker
         markerStyle: {
           'width':'8px',
           'background-color': 'red'
-          },,
+          },
       //set break time
-      breaks:[
-        {
-          time: '00:00:9:700',
-        },
-        {
-          time: '00:00:16',
-        },
-        {
-          time: '00:00:28',
-        },
-        {
-          time: '00:00:36',
-        }
-    ]
+      breaks:[9.5, 16, 28, 36]
   });
 
 Advanced Usage: show overlaid text and customize markerTip
@@ -103,18 +78,8 @@ In addition to displaying markers on the control bar, videojs-markers also show 
           }
         },
         //set break time
-        breaks:[
-          {
-            time: '00:00:9:700',
-          },
-          {
-            time: '00:00:16',
-          },
-          {
-            time: '00:00:28',
-          },
-          {
-            time: '00:00:36',
-          }
-      ]
+        breaks:[9.5, 16, 28, 36]
     });
+
+
+Default setting:

@@ -43,23 +43,29 @@ var video = videojs('test_video');
 video.markers({
     setting: {
       //set style, markertip, and breakOverlay
-      videoID: 'test_video'
+      videoID: 'test_video',
+      markerStyle: {
+        'width':'8px',
+        'background-color': 'red'
+        },
+      markerTip:{
+     
+        default_text: "Ad break"
+      },
+      breakOverlay:{
+        display: true,
+        display_time: 3,
+        default_text: "This is an ad break ",
+        style:{
+          'height': '30%',
+          'background-color': 'rgba(0,0,0,0.7)',
+          'color': 'white',
+          'font-size': '18px',
+        }
+      }
     },
     //set break time
-    breaks:[
-      {
-        time: '00:00:9:700',
-      },
-      {
-        time: '00:00:16',
-      },
-      {
-        time: '00:00:28',
-      },
-      {
-        time: '00:00:36',
-      }
-  ]
+    breaks:[9.5, 16, 28, 36]
 });
 
 

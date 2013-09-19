@@ -10,7 +10,7 @@
 
       },
       breakOverlay:{
-        display: true,
+        display: false,
         display_time: 3,
         default_text: "Break overlay",
         style:{
@@ -45,39 +45,25 @@
 
 
     var loadMarkers = function(){
-   
-
-
       console.log("creating markers");
       var duration = player.duration();
 
       marker_holder = [];
-
       // create the each marker div
-      $.each(options.breaks, function(key,val){
+      $.each(options.breaks, function(key,time){
 
         var m_h, m, time, marker_time, pos;
-        //m_h = $("<div class='vjs-marker-holder' id='"+key+"'></div>");
         m = $("<div class='vjs-marker'  id='"+key+"'></div>");
-        //m_h.append(m);
-
         m.css(setting.markerStyle);
      
-        m.css("margin-left", -parseFloat(m.css("width"))/2 +'px');  
-
-        //calculate the time to seconds, not gonna do error check
-        time = val.time.split(":");
-        if(time[3])
-          marker_time = parseInt(time[0])*3600+parseInt(time[1])*60+parseInt(time[2])+parseInt(time[3])*0.001;
-        else 
-          marker_time = parseInt(time[0])*3600+parseInt(time[1])*60+parseInt(time[2]);
-
+        m.css("margin-left", -parseFloat(m.css("width"))/2 +'px'); 
         video_wrapper.find('.vjs-progress-control').append(m);
-        pos = (marker_time/duration)*100;
+        
         // position the marker to correct time position 
+        pos = (time/duration)*100;
         m.css("left", pos +'%');  
 
-        marker_holder.push({div: m, time_in_second: marker_time, time: val.time, pos:pos});
+        marker_holder.push({div: m, time: time, pos:pos});
 
       });
       console.log(marker_holder);
@@ -85,7 +71,7 @@
       //bind click event to seek to marker time
       video_wrapper.find('.vjs-marker').on('click', function(e){
         marker_id = this.id;
-        player.currentTime(marker_holder[marker_id].time_in_second);
+        player.currentTime(marker_holder[marker_id].time);
       });
 
 
@@ -128,17 +114,17 @@
           ct = this.currentTime();
           //first check if the playback is still within the same break period
           if(overlay_index != -1){
-            if(ct < marker_holder[overlay_index].time_in_second || 
-               ct > (marker_holder[overlay_index].time_in_second+setting.breakOverlay.display_time)){
+            if(ct < marker_holder[overlay_index].time || 
+               ct > (marker_holder[overlay_index].time+setting.breakOverlay.display_time)){
               overlay_index = -1;
               break_overlay.css("visibility", "hidden");
             }
               
 
           }else{
-            //display overlay from marker.time_in_second till +breakOverlay.time
+            //display overlay from marker.time till +breakOverlay.time
             $.each(marker_holder, function(key, val){
-              if(ct >= val.time_in_second && ct <= (val.time_in_second+setting.breakOverlay.display_time)){
+              if(ct >= val.time && ct <= (val.time+setting.breakOverlay.display_time)){
                 overlay_index = key;
                 break_overlay.find('.vjs-break-overlay-text').html(setting.breakOverlay.default_text + ": " + (overlay_index+1));
     
