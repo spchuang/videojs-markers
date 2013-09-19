@@ -17,7 +17,7 @@ Add the 'videojs.markers.js' plugin and stylesheet after including videojs scrip
 
 Basic usage: display break markers in the video.
 
-To add breaks in the video, simply add a new time (in seconds) in the list of breaks option. Also note that the video id needs to be speified in the setting option.
+To add breaks in the video, simply add a new time (in seconds) in the list of breaks option. Also note that the video id needs to be specified in the setting option.
    
     // initialize video.js
     var video = videojs('test_video');
@@ -33,7 +33,7 @@ To add breaks in the video, simply add a new time (in seconds) in the list of br
 
 Customize marker style: 
 
-The style of the marker could be modified by passing an optional setting "markerStyle" with your preference of css settings. 
+The style of the markers could be modified by passing an optional setting "markerStyle" with your preference of css styles. 
 
     video.markers({
         setting: {
@@ -42,7 +42,6 @@ The style of the marker could be modified by passing an optional setting "marker
             'width':'8px',
             'background-color': 'red'
             },
-        //set break time
         breaks:[9.5, 16, 28, 36]
     });
 
@@ -88,6 +87,10 @@ Default setting of videojs-markers:
         'border-radius': '40%',
         'background-color': 'red'
       },
+      markerTip:{
+        display: true,
+        default_text: "Break"
+      },
       breakOverlay:{
         display: false,
         display_time: 3,
@@ -99,9 +102,5 @@ Default setting of videojs-markers:
           'color': 'white',
           'font-size': '17px',
         }
-      },
-      markerTip:{
-        display: true,
-        default_text: "Break"
       }
     };
