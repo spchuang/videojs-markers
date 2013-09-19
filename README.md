@@ -1,5 +1,8 @@
 Video.js Markers
 ===================
+
+![Alt text](/screenshot.jpg "Screen shot of videojs.markers")
+
 A plugin display customizable markers upon progress bars of the video with [Video.js](https://github.com/videojs/video.js/). This could be used to show video breaks.
 
 Using the Plugin
