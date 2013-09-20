@@ -1,18 +1,9 @@
-/* a wrapper element that tracks the mouse vertically */
-.vjs-marker-holder {
-  position: absolute;
-  height:100%;
-  bottom:0em;
-}
-
-/* the markers image itself */
 .vjs-marker {
   position: absolute;
   left: 0;
   bottom: 0em;
   opacity: 1;
   height:100%;
-  /*pointer-events:none;*/
   transition: opacity .2s ease;
   -webkit-transition: opacity .2s ease;
   -moz-transition: opacity .2s ease;
@@ -61,16 +52,12 @@
 
 .vjs-break-overlay{
   visibility: hidden; 
-  
   position: absolute;
-
-  
   z-index: 100000;
 }
 
 .vjs-break-overlay-text{
   padding: 9px;
-  font-size: 17px;
   text-align: center;
   
 }
