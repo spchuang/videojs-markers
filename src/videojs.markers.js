@@ -36,6 +36,34 @@
     video_wrapper = $(this.el());
     player = this;
 
+    //convert time in second to readable format HH:MM::SS;frame
+    function _convertFPSToTime(time, fps){
+      var hours, minutes, seconds, frames, finalString; 
+      hours = Math.floor(time / 3600);
+
+      minutes = Math.floor(time / 60) % 60;
+      seconds = Math.floor(time % 60);
+      if(fps){
+        frames = Math.floor((time - Math.floor(time))*fps);
+         finalString = (hours < 10 ? "0" : "") + hours + ":" + 
+          (minutes < 10 ? "0" : "") + minutes + ":" + 
+          (seconds < 10 ? "0" : "") + seconds +
+          (frames < 10 ? ";0" : ";") + frames;
+
+       }else{
+         finalString = (hours < 10 ? "0" : "") + hours + ":" + 
+          (minutes < 10 ? "0" : "") + minutes + ":" + 
+          (seconds < 10 ? "0" : "") + seconds
+
+       }
+   
+      
+
+       return finalString;
+
+
+    }
+
     var loadMarkers = function(){
       var duration, m, pos;
       console.log("[videojs-markers] creating markers");
@@ -76,7 +104,8 @@
         video_wrapper.find('.vjs-marker').on('mouseover', function(event){
           var marker_id = this.id;
 
-          marker_tip.find('.vjs-tip-inner').html(setting.markerTip.default_text + ": " + marker_holder[marker_id].time);
+          var markerTimeString = _convertFPSToTime(marker_holder[marker_id].time, parseInt(options.fps));
+          marker_tip.find('.vjs-tip-inner').html(setting.markerTip.default_text + ": " + markerTimeString);
 
           //margin-left needs to minus the padding length to align right now the markers
           marker_tip.css({"left": marker_holder[marker_id].pos+'%',
