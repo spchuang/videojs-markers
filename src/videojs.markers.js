@@ -36,8 +36,8 @@
          setting       = $.extend(true, {}, default_setting, options.setting),
          video_wrapper = $(this.el()),
          player        = this;
-      options.marker_text = options.marker_text | [];
-
+      options.marker_text   = options.marker_text || [];
+      options.marker_breaks = options.marker_breaks || [];
       function createMarkers(){
          // create the markers
          var duration, m, pos, text;
@@ -51,7 +51,7 @@
                   "left"          : pos+ '%'});
 
             video_wrapper.find('.vjs-progress-control').append(m);
-            text = options.marker_text|| options.marker_text[key] || "";
+            text = options.marker_text[key] || "";
             markers.push({div: m, time: time, pos:pos, text: text});
          });
       }
