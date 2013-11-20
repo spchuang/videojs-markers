@@ -2,7 +2,7 @@
 
 (function($,undefined) {
    //default setting
-   var defaults = {
+   var default_setting = {
       markerStyle:{
          'width':'7px',
          'border-radius': '30%',
@@ -23,7 +23,9 @@
             'color': 'white',
             'font-size': '17px'
          }
-      }
+      },
+
+
    };
 
    /**
@@ -31,9 +33,10 @@
     */
    videojs.plugin('markers', function(options) {
       var markers       = [],
-         setting       = $.extend(true, {}, defaults, options.setting),
+         setting       = $.extend(true, {}, default_setting, options.setting),
          video_wrapper = $(this.el()),
          player        = this;
+      options.marker_text = options.marker_text | [];
 
       function createMarkers(){
          // create the markers
@@ -48,7 +51,7 @@
                   "left"          : pos+ '%'});
 
             video_wrapper.find('.vjs-progress-control').append(m);
-            text = options.marker_text[key] || "";
+            text = options.marker_text|| options.marker_text[key] || "";
             markers.push({div: m, time: time, pos:pos, text: text});
          });
       }
