@@ -3,7 +3,7 @@ Video.js Markers
 
 ![Alt text](https://raw.github.com/spchuang/videojs-markers/master/screenshot.png?login=spchuang&token=04240921c2bab624c9f5e778348c312f "Screen shot of videojs.markers")
 
-A plugin that displays customizable markers upon progress bars of the video with [Video.js](https://github.com/videojs/video.js/). This could be used to show video breaks and show overlaid text on the video when playback reaches the specific break points.
+A plugin that displays customizable markers upon progress bars of the video with [Video.js](https://github.com/videojs/video.js/). This could be used to show video breaks and show overlaid text on the video when playback reaches the specific break point.
 
 Using the Plugin
 ----------------
@@ -24,8 +24,9 @@ To add breaks in the video, simply add a new time (in seconds) in the list of br
 
     //load the marker plugin
     video.markers({
-        //set break time
-        breaks:[9.5, 16, 28, 36]
+      //set break time
+      marker_breaks:[9.5, 16, 28, 36],
+      marker_text  :['text1','text2','text3','text4']
     });
 
 Customize marker style: 
@@ -33,12 +34,14 @@ Customize marker style:
 The style of the markers could be modified by passing an optional setting "markerStyle" with your preference of css styles. 
 
     video.markers({
-        setting: {
-          markerStyle: {
-            'width':'8px',
-            'background-color': 'red'
-            },
-        breaks:[9.5, 16, 28, 36]
+      setting: {
+        markerStyle: {
+          'width':'8px',
+          'background-color': 'red'
+        },
+      },
+      marker_breaks:[9.5, 16, 28, 36],
+      marker_text  :['text1','text2','text3','text4']
     });
 
 Advanced Usage: show overlaid text and customize markerTip.
@@ -47,32 +50,33 @@ In addition to displaying markers on the control bar, videojs-markers also show 
 
 
     video.markers({
-        setting: {
-          //set style, markertip, and breakOverlay
-          markerStyle: {
-            'width':'8px',
-            'background-color': 'red'
-            },
-          markerTip:{
-            display: true,
-            default_text: "Ad break"
-          },
-          breakOverlay:{
-            display: true,
-            display_time: 3,
-            default_text: "This is an ad break ", 
-
-            //overlaid box style
-            style:{
-              'height': '30%',
-              'background-color': 'rgba(0,0,0,0.7)',
-              'color': 'white',
-              'font-size': '18px',
-            }
-          }
+      setting: {
+        //set style, markertip, and breakOverlay
+        markerStyle: {
+          'width':'8px',
+          'background-color': 'orange'
         },
-        breaks:[9.5, 16, 28, 36]
-    });
+        markerTip:{
+          display: true,
+          default_text: "Ad break"
+        },
+        breakOverlay:{
+          display: true,
+          display_time: 3,
+          default_text: "This is an ad break ",
+
+          //overlaid box style
+          style:{
+            'height': '30%',
+            'background-color': 'rgba(200,80,15,0.8)',
+            'color': 'white',
+            'font-size': '18px'
+          }
+        }
+    },
+    marker_breaks:[9.5, 16, 28, 36],
+    marker_text  :['text1','text2','text3','text4']
+  });
 
 Default setting of videojs-markers:
 
