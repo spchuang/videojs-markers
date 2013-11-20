@@ -1,23 +1,15 @@
-
-</script>
-</body>
-</html>
 <!doctype html>
 <html>
 <head>
-  <title>Video.js Markers Example</title>
-  <!--<link href="http://vjs.zencdn.net/4.0/video-js.css" rel="stylesheet">!-->
-  <link href="http://vjs.zencdn.net/4.2/video-js.css" rel="stylesheet">
-  
-  <link href="../src/videojs.markers.css" rel="stylesheet">
-  <style>
-    p {
+   <title>Video.js Markers Example</title>
+
+   <style>
+      p {
       background-color: #eee;
       border: thin solid #777;
       padding: 10px;
-    }
-  </style>
-
+      }
+   </style>
 </head>
 <body>
 
@@ -30,31 +22,31 @@
 
 </body>
 <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-<!--<script src="http://vjs.zencdn.net/4.0/video.js"></script>!-->
 <script src="http://vjs.zencdn.net/4.2/video.js"></script>
+<link href="http://vjs.zencdn.net/4.2/video-js.css" rel="stylesheet">
 <script src='../src/videojs.markers.js'></script>
+<link href="../src/videojs.markers.css" rel="stylesheet">
 <script>
-// initialize video.js
-var video = videojs('test_video');
+   // initialize video.js
+   var video = videojs('test_video');
 
-//load the marker plugin
-video.markers({
-    setting: {
-      markerTip:{
-        default_text: "Ad break"
+   //load the marker plugin
+   video.markers({
+      setting: {
+         markerTip:{
+            default_text: "This is a break"
+         },
+         breakOverlay:{
+            display: true,
+            display_time: 3,
+            default_text: "This is an break overlay "
+         }
       },
-      breakOverlay:{
-        display: true,
-        display_time: 3,
-        default_text: "This is an ad break "
-      }
-    },
-    //set break time
-    breaks:[9.5, 16, 23.6, 28, 36],
-   
-});
+      //set break time
+      marker_breaks:[9.5, 16, 23.6, 28, 36]
 
 
+   });
 
 </script>
 </html>
