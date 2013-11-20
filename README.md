@@ -73,10 +73,10 @@ In addition to displaying markers on the control bar, videojs-markers also show 
             'font-size': '18px'
           }
         }
-    },
-    marker_breaks:[9.5, 16, 28, 36],
-    marker_text  :['text1','text2','text3','text4']
-  });
+      },
+      marker_breaks:[9.5, 16, 28, 36],
+      marker_text  :['text1','text2','text3','text4']
+    });
 
 Default setting of videojs-markers:
 
