@@ -33,31 +33,18 @@
    //load the marker plugin
    video.markers({
       setting: {
-         //set style, markertip, and breakOverlay
-         markerStyle: {
-            'width':'8px',
-            'background-color': 'orange'
-         },
          markerTip:{
-            display: true,
-            default_text: "Ad break"
+            default_text: "This is a break"
          },
          breakOverlay:{
             display: true,
             display_time: 3,
-            default_text: "This is an ad break ",
-
-            //overlaid box style
-            style:{
-               'height': '30%',
-               'background-color': 'rgba(200,80,15,0.8)',
-               'color': 'white',
-               'font-size': '18px'
-            }
+            default_text: "This is an break overlay "
          }
       },
-      marker_breaks:[9.5, 16, 28, 36],
-      marker_text  :['text1','text2','text3','text4']
+      //set break time
+      marker_breaks:[9.5, 16, 23.6, 28, 36],
+      marker_text:["this","is","so","cool",":)"]
    });
 
 </script>
