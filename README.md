@@ -1,7 +1,7 @@
 Video.js Markers
 ===================
 
-![Alt text](https://raw.github.com/spchuang/videojs-markers/master/screenshot.png?login=spchuang&token=04240921c2bab624c9f5e778348c312f "Screen shot of videojs.markers")
+![Alt text](https://raw.github.com/spchuang/videojs-markers/master/screenshot.png "Screen shot of videojs.markers")
 
 A plugin that displays customizable markers upon progress bars of the video with [Video.js](https://github.com/videojs/video.js/). This could be used to show video breaks and show overlaid text on the video when playback reaches the specific break point.
 
