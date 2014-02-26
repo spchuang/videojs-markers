@@ -1,5 +1,7 @@
 Video.js Markers
 ===================
+JSBin DEMO: http://jsbin.com/befob/7/edit
+
 
 ![Alt text](https://raw.github.com/spchuang/videojs-markers/master/screenshot.png "Screen shot of videojs.markers")
 
