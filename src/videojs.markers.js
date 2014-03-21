@@ -94,7 +94,7 @@
                $.each(markers, function(key, m){
                   if(ct >= m.time && ct <= (m.time+setting.breakOverlay.display_time)){
                      overlay_index = key;
-                     break_overlay.find('.vjs-break-overlay-text').html(setting.breakOverlay.default_text + (setting.breakOverlay.show_colon ? ":" : "") + " " + (overlay_index+1));
+                     break_overlay.find('.vjs-break-overlay-text').html(setting.breakOverlay.default_text + (setting.breakOverlay.show_colon ? ":" : "") + " " + (markers[overlay_index].text));
                      break_overlay.css("visibility", "visible");
                      return false;
                   }
