@@ -10,12 +10,14 @@
       },
       markerTip:{
          display: true,
-         default_text: "Break"
+         default_text: "Break",
+         show_colon: true
       },
       breakOverlay:{
          display: false,
          display_time: 3,
          default_text: "Break overlay",
+         show_colon: true,
          style:{
             'width':'100%',
             'height': '20%',
@@ -64,7 +66,7 @@
 
          video_wrapper.find('.vjs-marker').on('mouseover', function(){
             var id = this.id;
-            marker_tip.find('.vjs-tip-inner').html(setting.markerTip.default_text + ": " + markers[id].text);
+            marker_tip.find('.vjs-tip-inner').html(setting.markerTip.default_text + (setting.markerTip.show_colon ? ":" : "") + " " + markers[id].text);
 
             //margin-left needs to minus the padding length to align right now the markers
             marker_tip.css({"left"        : markers[id].pos+'%',
@@ -92,7 +94,7 @@
                $.each(markers, function(key, m){
                   if(ct >= m.time && ct <= (m.time+setting.breakOverlay.display_time)){
                      overlay_index = key;
-                     break_overlay.find('.vjs-break-overlay-text').html(setting.breakOverlay.default_text + ": " + (overlay_index+1));
+                     break_overlay.find('.vjs-break-overlay-text').html(setting.breakOverlay.default_text + (setting.breakOverlay.show_colon ? ":" : "") + " " + (markers[overlay_index].text));
                      break_overlay.css("visibility", "visible");
                      return false;
                   }

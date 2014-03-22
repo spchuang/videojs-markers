@@ -90,12 +90,14 @@ Default setting of videojs-markers:
       },
       markerTip:{
         display: true,
-        default_text: "Break"
+        default_text: "Break",
+        show_colon: true
       },
       breakOverlay:{
         display: false,
         display_time: 3,
         default_text: "Break overlay",
+        show_colon: true,
         style:{
           'width':'100%',
           'height': '20%',
