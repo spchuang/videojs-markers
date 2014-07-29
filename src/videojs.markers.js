@@ -26,10 +26,17 @@
             'font-size': '17px'
          }
       },
+      forceInitialization: false
 
 
    };
-
+   
+   function registerVideoJsMarkersPlugin() {
+      // check that videojs is loaded
+      if (!(typeof videojs == 'function')) { 
+         setTimeout(function() { registerVideoJsMarkersPlugin(); }, 100); 
+      } else {
+         
    /**
     * register the markers plugin (dependent on jquery)
     */
@@ -111,7 +118,11 @@
       }
 
       //load the markers
-      this.on("loadedmetadata", function(){
+      function initializeMarkers(){
+         if (player.duration() == 0) {
+            setTimeout(function() { initializeMarkers(); }, 100);
+         } else {
+            
          console.log("[videojs-markers] Initialize");
          createMarkers();
          console.log("[videojs-markers] markers");
@@ -126,6 +137,22 @@
          if(setting.breakOverlay.display){
             displayBreakOverlay();
          }
-      });
+         
+         }
+      }
+      
+      if(setting.forceInitialization){
+         initializeMarkers();
+      } else {
+          this.on("loadedmetadata", function(){
+             initializeMarkers();
+          });
+      }
+      
    });
+   
+   }}
+   
+   registerVideoJsMarkersPlugin();
+   
 })(jQuery);
