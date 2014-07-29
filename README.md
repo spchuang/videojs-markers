@@ -74,7 +74,8 @@ In addition to displaying markers on the control bar, videojs-markers also show 
             'color': 'white',
             'font-size': '18px'
           }
-        }
+        },
+        forceInitialization: true // doesn't wait for loadedmetadata event
       },
       marker_breaks:[9.5, 16, 28, 36],
       marker_text  :['text1','text2','text3','text4']
@@ -105,5 +106,6 @@ Default setting of videojs-markers:
           'color': 'white',
           'font-size': '17px',
         }
-      }
+      },
+      forceInitialization: false
     };
