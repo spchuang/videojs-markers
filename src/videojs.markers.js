@@ -28,6 +28,7 @@
       },
       forceInitialization: false
    };
+   var MARKER_ID_DELIMITER = '-videojsmarker-';
    
    function registerVideoJsMarkersPlugin() {
       // check that videojs is loaded
@@ -53,7 +54,7 @@
                duration = player.duration();
                $.each(options.marker_breaks, function(key,time){
                   pos = (time/duration)*100;
-                  m = $("<div class='vjs-marker'  id='"+key+"'></div>");
+                  m = $("<div class='vjs-marker'  id='"+ video_wrapper[0].id + MARKER_ID_DELIMITER + key+"'></div>");
                   m.css(setting.markerStyle)
                      .css({"margin-left"   : -parseFloat(m.css("width"))/2 +'px',
                         "left"          : pos+ '%'});
@@ -71,7 +72,7 @@
                video_wrapper.find('.vjs-progress-control').append(marker_tip);
                
                video_wrapper.find('.vjs-marker').on('mouseover', function(){
-                  var id = this.id;
+                  var id = this.id.split(MARKER_ID_DELIMITER)[1];
                   marker_tip.find('.vjs-tip-inner').html(setting.markerTip.default_text + (setting.markerTip.show_colon ? ":" : "") + " " + markers[id].text);
                   
                   //margin-left needs to minus the padding length to align right now the markers
@@ -127,7 +128,8 @@
                   console.log(markers);
                   //bind click event to seek to marker time
                   video_wrapper.find('.vjs-marker').on('click', function(e){
-                     player.currentTime(markers[this.id].time);
+                     var id = this.id.split(MARKER_ID_DELIMITER)[1];
+                     player.currentTime(markers[id].time);
                   });
                   if(setting.markerTip.display){
                      displayMarkerTip();
