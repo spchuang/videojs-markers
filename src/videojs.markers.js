@@ -46,10 +46,11 @@
                player        = this;
             options.marker_text   = options.marker_text || [];
             options.marker_breaks = options.marker_breaks || [];
+            options.marker_overlay = options.marker_overlay || [];
             
             function createMarkers(){
                // create the markers
-               var duration, m, pos, text;
+               var duration, m, pos, text, overlay;
                console.log("[videojs-markers] creating markers");
                duration = player.duration();
                $.each(options.marker_breaks, function(key,time){
@@ -61,7 +62,8 @@
                   
                   video_wrapper.find('.vjs-progress-control').append(m);
                   text = options.marker_text[key] || "";
-                  markers.push({div: m, time: time, pos:pos, text: text});
+                  overlay = options.marker_overlay[key] || text;
+                  markers.push({div: m, time: time, pos:pos, text: text, overlay: overlay});
                });
             }
             
@@ -101,8 +103,9 @@
                      $.each(markers, function(key, m){
                         if(ct >= m.time && ct <= (m.time+setting.breakOverlay.display_time)){
                            overlay_index = key;
-                           break_overlay.find('.vjs-break-overlay-text').html(setting.breakOverlay.default_text + (setting.breakOverlay.show_colon ? ":" : "") + " " + (markers[overlay_index].text));
-                           break_overlay.css("visibility", "visible");
+                           break_overlay.find('.vjs-break-overlay-text').html(jQuery.type(markers[overlay_index].overlay) !== "string" ? markers[overlay_index].overlay : setting.breakOverlay.default_text + (setting.breakOverlay.show_colon ? ":" : "") + " " + (markers[overlay_index].overlay));
+                           break_overlay.css( "visibility", "visible" );
+                           player.trigger("markerreached");
                            return false;
                         }
                      });
