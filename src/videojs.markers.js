@@ -126,6 +126,7 @@
                   setTimeout(function() { initializeMarkers(); }, 100);
                } else {
                   console.log("[videojs-markers] Initialize");
+                  video_wrapper.find('.vjs-marker').remove();
                   createMarkers();
                   console.log("[videojs-markers] markers");
                   console.log(markers);
