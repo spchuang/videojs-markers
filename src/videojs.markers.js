@@ -98,11 +98,12 @@
          }
 
          for (var i = 0; i < indexArray.length; i++) {
-            var marker = markersList[indexArray[i]];
+            var index = indexArray[i];
+            var marker = markersList[index];
             if (marker) {
                // delete from memory
                delete markers[marker.key];
-               markersList[i] = null;
+               markersList[index] = null;
                
                // delete from dom
                videoWrapper.find(".vjs-marker[data-marker-index='" + marker.key +"']").remove();
@@ -210,6 +211,7 @@
             // go to the next marker from current timestamp
             var currentTime = player.currentTime();
             for (var i = 0; i < markersList.length; i++) {
+ 
                if (markersList[i].time > currentTime) {
                   player.currentTime(markersList[i].time);
                   return false;
