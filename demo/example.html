@@ -38,12 +38,16 @@
    var playerMarkers = video.markers({
       setting: {
          markerTip:{
-            default_text: "This is a break: "
+            text: function(marker) {
+               return "This is a break: " + marker.text;
+            }
          },
          breakOverlay:{
             display: true,
             display_time: 3,
-            default_text: "This is an break overlay: "
+            text: function(marker) {
+               return "This is an break overlay: " + marker.text;
+            }
          }
       },
       onMarkerReached: function(marker) {

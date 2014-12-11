@@ -11,12 +11,16 @@
       },
       markerTip: {
          display: true,
-         default_text: "Break",
+         text: function(marker) {
+            return "Break: "+ marker.text;
+         }
       },
       breakOverlay:{
          display: false,
          display_time: 3,
-         default_text: "Break overlay",
+         text: function(marker) {
+            return "Break overlay: " + marker.text;
+         },
          style: {
             'width':'100%',
             'height': '20%',
@@ -63,8 +67,6 @@
             marker.div.css(setting.markerStyle)
                       .css({"margin-left" : -parseFloat(marker.div.css("width"))/2 + 'px', 
                             "left" : marker.position + '%'});
-            
-            marker.overlay = marker.overlay || marker.text || "";
             
             videoWrapper.find('.vjs-progress-control').append(marker.div);
             
@@ -117,7 +119,7 @@
          videoWrapper.find('.vjs-marker').on('mouseover', function(){
             var id = $(this).data('marker-index');
             
-            markerTip.find('.vjs-tip-inner').text(getMarkerTipText(id));
+            markerTip.find('.vjs-tip-inner').text(setting.markerTip.text(markers[id]));
             
             // margin-left needs to minus the padding length to align correctly with the marker
             markerTip.css({"left" : markers[id].position + '%',
@@ -138,7 +140,7 @@
             $.each(markers, function(index, marker){
                if (currentTime >= marker.time && currentTime <= (marker.time + setting.breakOverlay.display_time)) {
                   overlayIndex = marker.key;
-                  breakOverlay.find('.vjs-break-overlay-text').text(marker.overlay);
+                  breakOverlay.find('.vjs-break-overlay-text').text(setting.breakOverlay.text(marker));
                   breakOverlay.css('visibility', "visible");
                   
                   // trigger event
