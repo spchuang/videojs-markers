@@ -28,7 +28,7 @@
    };
    
    // create a non-colliding random number
-   function generateUUID(){
+   function generateUUID() {
       var d = new Date().getTime();
       var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
          var r = (d + Math.random()*16)%16 | 0;
@@ -55,7 +55,7 @@
          // create the markers
          var duration = player.duration();
          
-         $.each(newMarkers, function(index, marker){
+         $.each(newMarkers, function(index, marker) {
             marker.position = (marker.time / duration) * 100;
             marker.key = generateUUID();
             marker.div = $("<div class='vjs-marker' data-marker-index='" + marker.key + "'></div>");
@@ -84,8 +84,7 @@
          
          for (var i = 0; i < indexArray.length; i++) {
             var marker = markersList[indexArray[i]];
-            if(marker) {
-
+            if (marker) {
                // delete from memory
                delete markers[marker.key];
                markersList[i] = null;
@@ -137,20 +136,23 @@
          if(overlayIndex == -1){
             //check if playback enters any break period
             $.each(markers, function(index, marker){
-               if(currentTime >= marker.time && currentTime <= (marker.time + setting.breakOverlay.display_time)){
+               if (currentTime >= marker.time && currentTime <= (marker.time + setting.breakOverlay.display_time)) {
                   overlayIndex = marker.key;
                   breakOverlay.find('.vjs-break-overlay-text').text(marker.overlay);
                   breakOverlay.css('visibility', "visible");
                   
                   // trigger event
-                  player.trigger("markerreached");
+                  if(options.onMarkerReached) {
+                    options.onMarkerReached(marker);
+                  }
+
                   return false;
                }
             });
          }else{
             //overlay is on, check if we left the break period yet
-            if(currentTime < markers[overlayIndex].time ||
-               currentTime > markers[overlayIndex].time + setting.breakOverlay.display_time){
+            if (currentTime < markers[overlayIndex].time ||
+               currentTime > markers[overlayIndex].time + setting.breakOverlay.display_time) {
                overlayIndex = -1;
                breakOverlay.css("visibility", "hidden");
             }
@@ -173,14 +175,14 @@
          addMarkers(options.markers);
          
          //bind click event to seek to marker time
-         videoWrapper.find('.vjs-marker').on('click', function(e){
+         videoWrapper.find('.vjs-marker').on('click', function(e) {
             var key = $(this).data('marker-index');
             player.currentTime(markers[key].time);
          });
-         if(setting.markerTip.display){
+         if (setting.markerTip.display) {
             displayMarkerTip();
          }
-         if(setting.breakOverlay.display){
+         if (setting.breakOverlay.display) {
             initializeOverlay();
             //bind timeupdate handle for displaying break overlays
             player.on("timeupdate", updateBreakOverlay);
@@ -188,7 +190,7 @@
       }
       
       // setup the plugin after we loaded video's meta data
-      player.on("loadedmetadata", function(){
+      player.on("loadedmetadata", function() {
          initialize();
       });
       

@@ -46,6 +46,9 @@
             default_text: "This is an break overlay: "
          }
       },
+      onMarkerReached: function(marker) {
+         //
+      },
       markers: [
          {
             time: 9.5,
@@ -69,6 +72,7 @@
          }
       ]
    });
+   
    $(".next").click(function(){
       playerMarkers.next();
    });
