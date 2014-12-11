@@ -1,3 +1,5 @@
+/*! videojs-markers - v0.8.1 - 2014-12-12
+* Copyright (c) 2014 ; Licensed  */
 /*! videojs-markers !*/
 'use strict'; 
 
