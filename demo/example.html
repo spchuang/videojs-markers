@@ -19,11 +19,15 @@
       <source src="http://vjs.zencdn.net/v/oceans.mp4" type="video/mp4">
       <source src="http://vjs.zencdn.net/v/oceans.webm" type="video/webm">
     </video>
-
+  <div class='next'>Next</div>
+  <div class='prev'>Prev</div>
+  <div class='remove'>Remove</div>
+  <div class='add'>Add</div>
+  
 </body>
 <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-<script src="http://vjs.zencdn.net/4.2/video.js"></script>
-<link href="http://vjs.zencdn.net/4.2/video-js.css" rel="stylesheet">
+<script src="http://vjs.zencdn.net/4.3/video.js"></script>
+<link href="http://vjs.zencdn.net/4.3/video-js.css" rel="stylesheet">
 <script src='../src/videojs.markers.js'></script>
 <link href="../src/videojs.markers.css" rel="stylesheet">
 <script>
@@ -31,21 +35,55 @@
    var video = videojs('test_video');
 
    //load the marker plugin
-   video.markers({
+   var playerMarkers = video.markers({
       setting: {
          markerTip:{
-            default_text: "This is a break"
+            default_text: "This is a break: "
          },
          breakOverlay:{
             display: true,
             display_time: 3,
-            default_text: "This is an break overlay "
+            default_text: "This is an break overlay: "
          }
       },
-      //set break time
-      marker_breaks:[9.5, 16, 23.6, 28, 36],
-      marker_text:["this","is","so","cool",":)"]
+      markers: [
+         {
+            time: 9.5,
+            text: "this"
+         },
+         {
+            time: 16,
+            text: "is"
+         },
+         {
+            time: 23.6,
+            text: "so"
+         },
+         {
+            time: 28,
+            text: "cool"
+         },
+         {
+            time: 36,
+            text: ":)"
+         }
+      ]
    });
-
+   $(".next").click(function(){
+      playerMarkers.next();
+   });
+   $(".prev").click(function(){
+      playerMarkers.prev();
+   });
+   $(".remove").click(function(){
+      playerMarkers.remove([1,2]);
+   })
+   $(".add").click(function(){
+      playerMarkers.add([{
+            time: 40,
+            text: "I'm NEW"
+         }]);
+   })
+   //console.log(t.test());
 </script>
 </html>
