@@ -82,8 +82,9 @@
                player.currentTime(markers[key].time);
             });
             
-            registerMarkerTipHandler(marker.div);
-            
+            if (setting.markerTip.display) {
+               registerMarkerTipHandler(marker.div);
+            }
          });
          
          // sort the list by time in asc order
