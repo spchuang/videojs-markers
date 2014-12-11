@@ -52,7 +52,8 @@
           markersList  = [], // list of markers sorted by time
           videoWrapper = $(this.el()),
           player       = this,
-          breakOverlay,
+          markerTip    = null,
+          breakOverlay = null,
           overlayIndex;
       
       function addMarkers(newMarkers) {
@@ -73,6 +74,16 @@
             // store marker in an internal hash map
             markers[marker.key] = marker;
             markersList.push(marker);
+            
+            // register event handlers
+            //bind click event to seek to marker time
+            marker.div.on('click', function(e) {
+               var key = $(this).data('marker-index');
+               player.currentTime(markers[key].time);
+            });
+            
+            registerMarkerTipHandler(marker.div);
+            
          });
          
          // sort the list by time in asc order
@@ -81,9 +92,11 @@
       
       function removeMarkers(indexArray) {
          // reset overlay
-         overlayIndex = -1;
-         breakOverlay.css("visibility", "hidden");
-         
+         if (breakOverlay){
+             overlayIndex = -1;
+             breakOverlay.css("visibility", "hidden");
+         }
+
          for (var i = 0; i < indexArray.length; i++) {
             var marker = markersList[indexArray[i]];
             if (marker) {
@@ -107,16 +120,10 @@
          markersList.sort(function(marker){return -marker.time});
       }
       
-      function getMarkerTipText(id) {
-         return setting.markerTip.default_text + markers[id].text;  
-      }
-      
-      function displayMarkerTip() {
-         var markerTip = $("<div class='vjs-tip'><div class='vjs-tip-arrow'></div><div class='vjs-tip-inner'></div></div>");
-         videoWrapper.find('.vjs-progress-control').append(markerTip);
+      // attach hover event handler
+      function registerMarkerTipHandler(markerDiv) {
          
-         // attach hover event handler
-         videoWrapper.find('.vjs-marker').on('mouseover', function(){
+         markerDiv.on('mouseover', function(){
             var id = $(this).data('marker-index');
             
             markerTip.find('.vjs-tip-inner').text(setting.markerTip.text(markers[id]));
@@ -129,6 +136,11 @@
          }).on('mouseout',function(){
             markerTip.css("visibility", "hidden");
          });
+      }
+      
+      function initializeMarkerTip() {
+         markerTip = $("<div class='vjs-tip'><div class='vjs-tip-arrow'></div><div class='vjs-tip-inner'></div></div>");
+         videoWrapper.find('.vjs-progress-control').append(markerTip);
       }
       
       // show or hide break overlays
@@ -172,18 +184,14 @@
       
       // setup the whole thing
       function initialize() {
-         // remove existing markers if already initialized
-         videoWrapper.find('.vjs-marker').remove();
-         addMarkers(options.markers);
-         
-         //bind click event to seek to marker time
-         videoWrapper.find('.vjs-marker').on('click', function(e) {
-            var key = $(this).data('marker-index');
-            player.currentTime(markers[key].time);
-         });
          if (setting.markerTip.display) {
-            displayMarkerTip();
+            initializeMarkerTip();
          }
+      
+         // remove existing markers if already initialized
+         player.markers.removeAll();
+         addMarkers(options.markers);
+                  
          if (setting.breakOverlay.display) {
             initializeOverlay();
             //bind timeupdate handle for displaying break overlays
@@ -227,10 +235,32 @@
             // remove markers given an array of index
             removeMarkers(indexArray);
          },
+         removeAll: function(){
+            var indexArray = [];
+            for (var i = 0; i < markersList.length; i++) {
+               indexArray.push(i);
+            }
+            removeMarkers(indexArray);
+         },
+         reset: function(newMarkers){
+            // remove all the existing markers and add new ones
+            player.markers.removeAll();
+            addMarkers(newMarkers);
+         },
          destroy: function(){
-            
-         }
+            // unregister the plugins and clean up even handlers
+            player.markers.removeAll();
+            breakOverlay.remove();
+            markerTip.remove();
+            player.off("timeupdate", updateBreakOverlay);
+            delete player.markers;
+            delete player.getMarkers;
+         },
       };
+      
+      player.getMarkers = function(){
+         return player.markers;
+      }
 
       return player.markers;
    }

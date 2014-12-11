@@ -23,7 +23,7 @@
   <div class='prev'>Prev</div>
   <div class='remove'>Remove</div>
   <div class='add'>Add</div>
-  
+  <div class='destroy'>Destroy</div>
 </body>
 <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
 <script src="http://vjs.zencdn.net/4.3/video.js"></script>
@@ -32,10 +32,10 @@
 <link href="../src/videojs.markers.css" rel="stylesheet">
 <script>
    // initialize video.js
-   var video = videojs('test_video');
+   var player = videojs('test_video');
 
    //load the marker plugin
-   var playerMarkers = video.markers({
+   player.markers({
       setting: {
          markerTip:{
             text: function(marker) {
@@ -78,19 +78,22 @@
    });
    
    $(".next").click(function(){
-      playerMarkers.next();
+      player.getMarkers().next();
    });
    $(".prev").click(function(){
-      playerMarkers.prev();
+      player.getMarkers().prev();
    });
    $(".remove").click(function(){
-      playerMarkers.remove([1,2]);
+      player.getMarkers().remove([1,2]);
    })
    $(".add").click(function(){
-      playerMarkers.add([{
+      player.getMarkers().add([{
             time: 40,
             text: "I'm NEW"
          }]);
+   });
+   $(".destroy").click(function(){
+      player.getMarkers().destroy();
    })
    //console.log(t.test());
 </script>
