@@ -17,7 +17,7 @@
       },
       breakOverlay:{
          display: false,
-         display_time: 3,
+         displayTime: 3,
          text: function(marker) {
             return "Break overlay: " + marker.text;
          },
@@ -212,7 +212,6 @@
             // go to the next marker from current timestamp
             var currentTime = player.currentTime();
             for (var i = 0; i < markersList.length; i++) {
- 
                if (markersList[i].time > currentTime) {
                   player.currentTime(markersList[i].time);
                   return false;
@@ -260,10 +259,6 @@
             delete player.getMarkers;
          },
       };
-      
-      player.getMarkers = function(){
-         return player.markers;
-      }
    }
 
    videojs.plugin('markers', registerVideoJsMarkersPlugin);

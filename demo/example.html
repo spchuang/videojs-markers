@@ -38,13 +38,14 @@
    player.markers({
       setting: {
          markerTip:{
+            display: true,
             text: function(marker) {
                return "This is a break: " + marker.text;
             }
          },
          breakOverlay:{
             display: true,
-            display_time: 3,
+            displayTime: 3,
             text: function(marker) {
                return "This is an break overlay: " + marker.text;
             }
@@ -75,22 +76,22 @@
    });
    
    $(".next").click(function(){
-      player.getMarkers().next();
+      player.markers.next();
    });
    $(".prev").click(function(){
-      player.getMarkers().prev();
+      player.markers.prev();
    });
    $(".remove").click(function(){
-      player.getMarkers().remove([1,2]);
+      player.markers.remove([1,2]);
    })
    $(".add").click(function(){
-      player.getMarkers().add([{
+      player.markers.add([{
             time: 40,
             text: "I'm NEW"
          }]);
    });
    $(".destroy").click(function(){
-      player.getMarkers().destroy();
+      player.markers.destroy();
    })
 </script>
 </html>
