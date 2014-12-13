@@ -69,6 +69,14 @@
                       .css({"margin-left" : -parseFloat(marker.div.css("width"))/2 + 'px', 
                             "left" : marker.position + '%'});
             
+            // add user-defined class to marker
+            if (marker.class) {
+               marker.div.addClass(marker.class);
+            }
+            
+            marker.text = marker.text || "";
+            marker.overlay = marker.overlay || "";
+            
             videoWrapper.find('.vjs-progress-control').append(marker.div);
             
             // store marker in an internal hash map

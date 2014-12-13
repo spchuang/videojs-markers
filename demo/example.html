@@ -23,6 +23,7 @@
   <div class='prev'>Prev</div>
   <div class='remove'>Remove</div>
   <div class='add'>Add</div>
+  <div class='reset'>Reset</div>
   <div class='destroy'>Destroy</div>
 </body>
 <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
@@ -88,6 +89,16 @@
       player.markers.add([{
             time: 40,
             text: "I'm NEW"
+         }]);
+   });
+   $(".reset").click(function(){
+      player.markers.reset([{
+            time: 40,
+            text: "I'm NEW"
+         },
+         {
+            time:20,
+            text: "Brank new"
          }]);
    });
    $(".destroy").click(function(){
