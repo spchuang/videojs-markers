@@ -29,6 +29,8 @@
             'font-size': '17px'
          }
       }
+      onMarkerReached: function(marker) {},
+      markers: []
    };
    
    // create a non-colliding random number
@@ -160,7 +162,7 @@
          if(overlayIndex == -1){
             //check if playback enters any break period
             $.each(markers, function(index, marker){
-               if (currentTime >= marker.time && currentTime <= (marker.time + setting.breakOverlay.display_time)) {
+               if (currentTime >= marker.time && currentTime <= (marker.time + setting.breakOverlay.displayTime)) {
                   overlayIndex = marker.key;
                   breakOverlay.find('.vjs-break-overlay-text').text(setting.breakOverlay.text(marker));
                   breakOverlay.css('visibility', "visible");
@@ -176,7 +178,7 @@
          }else{
             //overlay is on, check if we left the break period yet
             if (currentTime < markers[overlayIndex].time ||
-               currentTime > markers[overlayIndex].time + setting.breakOverlay.display_time) {
+               currentTime > markers[overlayIndex].time + setting.breakOverlay.displayTime) {
                overlayIndex = -1;
                breakOverlay.css("visibility", "hidden");
             }
