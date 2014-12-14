@@ -1,7 +1,7 @@
 {
   "name": "videojs-markers",
   "description": "video marker breaks plugin for video.js",
-  "version": "0.8.1",
+  "version": "0.4.0",
   "peerDependencies": {
     "video-js": "4.0",
     "jQuery": "2.0.3"

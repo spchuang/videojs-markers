@@ -5,11 +5,14 @@
 
    <style>
       p {
-      background-color: #eee;
-      border: thin solid #777;
-      padding: 10px;
+         background-color: #eee;
+         border: thin solid #777;
+         padding: 10px;
       }
    </style>
+   <link href="http://vjs.zencdn.net/4.3/video-js.css" rel="stylesheet">
+   <link href="../dist/videojs.markers.css" rel="stylesheet">
+   
 </head>
 <body>
 
@@ -28,27 +31,31 @@
 </body>
 <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
 <script src="http://vjs.zencdn.net/4.3/video.js"></script>
-<link href="http://vjs.zencdn.net/4.3/video-js.css" rel="stylesheet">
 <script src='../src/videojs.markers.js'></script>
-<link href="../dist/videojs.markers.css" rel="stylesheet">
+
 <script>
    // initialize video.js
    var player = videojs('test_video');
 
    //load the marker plugin
    player.markers({
-      markerTip:{
-         display: true,
-         text: function(marker) {
-            return "This is a break: " + marker.text;
+      setting: {
+         markerTip:{
+            display: true,
+            text: function(marker) {
+               return "This is a break: " + marker.text;
+            }
+         },
+         breakOverlay:{
+            display: true,
+            displayTime: 3,
+            text: function(marker) {
+               return "This is an break overlay: " + marker.text;
+            }
          }
       },
-      breakOverlay:{
-         display: true,
-         displayTime: 3,
-         text: function(marker) {
-            return "This is an break overlay: " + marker.text;
-         }
+      onMarkerReached: function(marker) {
+        alert("OK"); 
       },
       markers: [
          {
