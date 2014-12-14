@@ -1,4 +1,4 @@
-/*! videojs-markers - v0.8.1 - 2014-12-12
+/*! videojs-markers - v0.8.1 - 2014-12-14
 * Copyright (c) 2014 ; Licensed  */
 /*! videojs-markers !*/
 'use strict'; 
@@ -19,7 +19,7 @@
       },
       breakOverlay:{
          display: false,
-         display_time: 3,
+         displayTime: 3,
          text: function(marker) {
             return "Break overlay: " + marker.text;
          },
@@ -30,7 +30,9 @@
             'color': 'white',
             'font-size': '17px'
          }
-      }
+      },
+      onMarkerReached: function(marker) {},
+      markers: []
    };
    
    // create a non-colliding random number
@@ -71,6 +73,14 @@
                       .css({"margin-left" : -parseFloat(marker.div.css("width"))/2 + 'px', 
                             "left" : marker.position + '%'});
             
+            // add user-defined class to marker
+            if (marker.class) {
+               marker.div.addClass(marker.class);
+            }
+            
+            marker.text = marker.text || "";
+            marker.overlay = marker.overlay || "";
+            
             videoWrapper.find('.vjs-progress-control').append(marker.div);
             
             // store marker in an internal hash map
@@ -84,8 +94,9 @@
                player.currentTime(markers[key].time);
             });
             
-            registerMarkerTipHandler(marker.div);
-            
+            if (setting.markerTip.display) {
+               registerMarkerTipHandler(marker.div);
+            }
          });
          
          // sort the list by time in asc order
@@ -100,11 +111,12 @@
          }
 
          for (var i = 0; i < indexArray.length; i++) {
-            var marker = markersList[indexArray[i]];
+            var index = indexArray[i];
+            var marker = markersList[index];
             if (marker) {
                // delete from memory
                delete markers[marker.key];
-               markersList[i] = null;
+               markersList[index] = null;
                
                // delete from dom
                videoWrapper.find(".vjs-marker[data-marker-index='" + marker.key +"']").remove();
@@ -152,7 +164,7 @@
          if(overlayIndex == -1){
             //check if playback enters any break period
             $.each(markers, function(index, marker){
-               if (currentTime >= marker.time && currentTime <= (marker.time + setting.breakOverlay.display_time)) {
+               if (currentTime >= marker.time && currentTime <= (marker.time + setting.breakOverlay.displayTime)) {
                   overlayIndex = marker.key;
                   breakOverlay.find('.vjs-break-overlay-text').text(setting.breakOverlay.text(marker));
                   breakOverlay.css('visibility', "visible");
@@ -168,7 +180,7 @@
          }else{
             //overlay is on, check if we left the break period yet
             if (currentTime < markers[overlayIndex].time ||
-               currentTime > markers[overlayIndex].time + setting.breakOverlay.display_time) {
+               currentTime > markers[overlayIndex].time + setting.breakOverlay.displayTime) {
                overlayIndex = -1;
                breakOverlay.css("visibility", "hidden");
             }
@@ -259,10 +271,6 @@
             delete player.getMarkers;
          },
       };
-      
-      player.getMarkers = function(){
-         return player.markers;
-      }
    }
 
    videojs.plugin('markers', registerVideoJsMarkersPlugin);

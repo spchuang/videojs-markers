@@ -28,7 +28,7 @@
             'color': 'white',
             'font-size': '17px'
          }
-      }
+      },
       onMarkerReached: function(marker) {},
       markers: []
    };
