@@ -60,6 +60,11 @@
           breakOverlay = null,
           overlayIndex;
           
+      function sortMarkersList() {
+         // sort the list by time in asc order
+         markersList.sort(function(a, b){return a.time - b.time});
+      }
+      
       function addMarkers(newMarkers) {
          // create the markers
          var duration = player.duration();
@@ -99,8 +104,7 @@
             }
          });
          
-         // sort the list by time in asc order
-         markersList.sort(function(marker){return -marker.time});
+         sortMarkersList();
       }
       
       function removeMarkers(indexArray) {
@@ -131,7 +135,7 @@
          }
          
          // sort again
-         markersList.sort(function(marker){return -marker.time});
+         sortMarkersList();
       }
       
       // attach hover event handler
