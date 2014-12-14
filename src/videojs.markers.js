@@ -19,7 +19,7 @@
          display: false,
          displayTime: 3,
          text: function(marker) {
-            return "Break overlay: " + marker.text;
+            return "Break overlay: " + marker.overlayText;
          },
          style: {
             'width':'100%',
