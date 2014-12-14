@@ -6,6 +6,7 @@ A plugin that displays customizable markers upon progress bars of the video with
 
 ## Demo and Documentation
 See [here](www.sampingchuang.com/videojs-markers)
+
 JSBin Demo can be found [here] (http://jsbin.com/befob/7/edit)
 
 ## Feastures
@@ -55,7 +56,7 @@ The style of the markers could be modified by passing an optional setting "marke
          {time: 23.6,text: "so"},
          {time: 28,  text: "cool"}
       ]    
-   });
+    });
    
 ## History
 - 0.4
