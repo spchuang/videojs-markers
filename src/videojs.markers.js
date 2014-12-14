@@ -49,7 +49,7 @@
        * register the markers plugin (dependent on jquery)
        */
    
-      var setting      = $.extend(true, {}, defaultSetting, options.setting),
+      var setting      = $.extend(true, {}, defaultSetting, options),
           markers      = {},
           markersList  = [], // list of markers sorted by time
           videoWrapper = $(this.el()),
@@ -57,7 +57,7 @@
           markerTip    = null,
           breakOverlay = null,
           overlayIndex;
-      
+          
       function addMarkers(newMarkers) {
          // create the markers
          var duration = player.duration();
@@ -77,7 +77,7 @@
             }
             
             marker.text = marker.text || "";
-            marker.overlay = marker.overlay || "";
+            marker.overlayText = marker.overlayText || "";
             
             videoWrapper.find('.vjs-progress-control').append(marker.div);
             

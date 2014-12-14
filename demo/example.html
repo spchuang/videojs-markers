@@ -39,19 +39,17 @@
 
    //load the marker plugin
    player.markers({
-      setting: {
-         markerTip:{
-            display: true,
-            text: function(marker) {
-               return "This is a break: " + marker.text;
-            }
-         },
-         breakOverlay:{
-            display: true,
-            displayTime: 3,
-            text: function(marker) {
-               return "This is an break overlay: " + marker.text;
-            }
+      markerTip:{
+         display: true,
+         text: function(marker) {
+            return "This is a break: " + marker.text;
+         }
+      },
+      breakOverlay:{
+         display: true,
+         displayTime: 3,
+         text: function(marker) {
+            return "This is an break overlay: " + marker.text;
          }
       },
       onMarkerReached: function(marker) {
