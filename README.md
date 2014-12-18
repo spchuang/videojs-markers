@@ -9,7 +9,7 @@ See [here](www.sampingchuang.com/videojs-markers)
 
 JSBin Demo can be found [here] (http://jsbin.com/befob/7/edit)
 
-## Feastures
+## Features
 * Display markers on progress bar, with hover-over tooltips
 * Display break overlays
 * Flexible styling
