@@ -5,7 +5,7 @@ Video.js Markers
 A plugin that displays customizable markers upon progress bars of the video with [Video.js](https://github.com/videojs/video.js/). This could be used to show video breaks and show overlaid text on the video when playback reaches the specific break point.
 
 ## Demo and Documentation
-See [here](www.sampingchuang.com/videojs-markers)
+See [here]((http://www.sampingchuang.com/videojs-markers)
 
 JSBin Demo can be found [here] (http://jsbin.com/befob/7/edit)
 
