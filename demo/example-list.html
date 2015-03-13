@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+<head>
+   <title>Video.js Markers Example</title>
+
+   <style>
+      p {
+         background-color: #eee;
+         border: thin solid #777;
+         padding: 10px;
+      }
+      ul#marker-list{
+         list-style-type: none;
+         margin: 0;
+         padding: 0;
+         width: 300px;
+         margin-top: 10px;
+      }
+      
+      ul#marker-list li{
+         position: relative;
+         margin-bottom: -1px;
+         background-color: #fff;
+         border: 1px solid #ddd;       
+      }
+      ul#marker-list li:last-child {
+         margin-bottom: 0;
+         border-bottom-right-radius: 4px;
+         border-bottom-left-radius: 4px;
+      }
+      ul#marker-list li a{
+         display: block;
+         padding: 10px 15px;
+         color: #555;
+         text-decoration: none;
+      }
+      ul#marker-list li a:hover {
+         color: #555;
+         text-decoration: none;
+         background-color: #f5f5f5;
+      }
+   </style>
+   <link href="http://vjs.zencdn.net/4.3/video-js.css" rel="stylesheet">
+   <link href="../dist/videojs.markers.css" rel="stylesheet">
+   
+</head>
+<body>
+
+  <p>This is a demo of video-markers plugin for videojs</p>
+
+  <video id="test_video" controls preload="none" class="video-js vjs-default-skin" width="640" height="264">
+      <source src="http://vjs.zencdn.net/v/oceans.mp4" type="video/mp4">
+      <source src="http://vjs.zencdn.net/v/oceans.webm" type="video/webm">
+  </video>
+  
+  <ul id='marker-list'>
+   
+  </ul>
+   
+</body>
+<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+<script src="http://vjs.zencdn.net/4.3/video.js"></script>
+<script src='../src/videojs.markers.js'></script>
+
+<script>
+   // initialize video.js
+   var player = videojs('test_video');
+
+   var markers = [
+         {
+            time: 9.5,
+            text: "Chapter 1"
+         },
+         {
+            time: 16,
+            text: "Chapter 2"
+         },
+         {
+            time: 23.6,
+            text: "Chapter 3"
+         },
+         {
+            time: 28,
+            text: "Chapter 4"
+         },
+         {
+            time: 36,
+            text: "Chapter 5"
+         }
+      ];
+
+   //load the marker plugin
+   player.markers({
+      markerTip:{
+         display: true,
+         text: function(marker){
+            return marker.text;
+         }
+      },
+      breakOverlay:{
+         display: true,
+         displayTime: 3,
+         text: function(marker) {
+            return "This is an break overlay: " + marker.text;
+         }
+      },
+      onMarkerReached: function(marker) {
+        console.log(marker); 
+      },
+      markers: markers
+   });
+   
+   $(document).ready(function(){
+      // insert marker list
+      for(var i =0; i < markers.length; i++){
+         var item = $("<li data-index='"+i+"'><a href='#'>"+markers[i].text+"</a></li>");
+         $("#marker-list").append(item);
+      }
+      
+      // set up click event
+      $("#marker-list li").click(function(){
+         var index = $(this).data("index");
+      
+         player.currentTime(markers[index].time);
+      });
+      
+   });
+   
+   
+</script>
+</html>
