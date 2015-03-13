@@ -53,10 +53,11 @@
           markers      = {},
           markersList  = [], // list of markers sorted by time
           videoWrapper = $(this.el()),
+          currentMarkerIndex  = -1, 
           player       = this,
           markerTip    = null,
           breakOverlay = null,
-          overlayIndex;
+          overlayIndex = -1;
           
       function sortMarkersList() {
          // sort the list by time in asc order
@@ -111,6 +112,7 @@
              overlayIndex = -1;
              breakOverlay.css("visibility", "hidden");
          }
+         currentMarkerIndex = -1;
 
          for (var i = 0; i < indexArray.length; i++) {
             var index = indexArray[i];
@@ -160,32 +162,26 @@
       }
       
       // show or hide break overlays
-      function updateBreakOverlay() {
-         var currentTime = player.currentTime();
+      function updateBreakOverlay(currentTime) {
+         if(currentMarkerIndex < 0){
+            return;
+         }
          
-         if(overlayIndex == -1){
-            //check if playback enters any break period
-            $.each(markers, function(index, marker){
-               if (currentTime >= marker.time && currentTime <= (marker.time + setting.breakOverlay.displayTime)) {
-                  overlayIndex = marker.key;
-                  breakOverlay.find('.vjs-break-overlay-text').text(setting.breakOverlay.text(marker));
-                  breakOverlay.css('visibility', "visible");
-                  
-                  // trigger event
-                  if(options.onMarkerReached) {
-                    options.onMarkerReached(marker);
-                  }
+         var marker = markersList[currentMarkerIndex];
+      
+         if (currentTime >= marker.time && 
+               currentTime <= (marker.time + setting.breakOverlay.displayTime)) {
 
-                  return false;
-               }
-            });
-         }else{
-            //overlay is on, check if we left the break period yet
-            if (currentTime < markers[overlayIndex].time ||
-               currentTime > markers[overlayIndex].time + setting.breakOverlay.displayTime) {
-               overlayIndex = -1;
-               breakOverlay.css("visibility", "hidden");
+            if (overlayIndex != currentMarkerIndex){
+               overlayIndex = currentMarkerIndex;
+               breakOverlay.find('.vjs-break-overlay-text').text(setting.breakOverlay.text(marker));
             }
+            
+            breakOverlay.css('visibility', "visible");
+            
+         } else {
+            overlayIndex = -1;
+            breakOverlay.css("visibility", "hidden");
          }
       }
       
@@ -197,6 +193,46 @@
          overlayIndex = -1;
       }
       
+      function onTimeUpdate() {
+         /*
+             check marker reached in between markers
+             the logic here is that it triggers a new marker reached event only if the player 
+             enters a new marker range (e.g. from marker 1 to marker 2). Thus, if player is on marker 1 and user clicked on marker 1 again, no new reached event is triggered)
+         */
+         var currentTime = player.currentTime();
+         var newMarkerIndex;
+         
+         //check first marker, no marker is selected
+         if (markersList.length > 0 && currentTime < markersList[0].time) {
+            newMarkerIndex = -1;
+         } else {
+            for (var i = 0; i < markersList.length; i++) {
+               // next marker time of last marker would be end of video time
+               var nextMarkerTime = player.duration();
+               if (i < markersList.length - 1) {
+                  nextMarkerTime = markersList[i + 1].time;
+               } 
+               
+               if(currentTime >= markersList[i].time && currentTime < nextMarkerTime) {
+                  newMarkerIndex = i;
+               }
+            }
+         }
+         
+         // set marker index
+         if (newMarkerIndex != currentMarkerIndex) {
+            // trigger event
+            if (newMarkerIndex != -1 && options.onMarkerReached) {
+              options.onMarkerReached(markersList[newMarkerIndex]);
+            }
+            currentMarkerIndex = newMarkerIndex;
+         }
+         
+         // update overlay
+         if(setting.breakOverlay.display) {
+            updateBreakOverlay(currentTime);
+         }
+      }
       
       // setup the whole thing
       function initialize() {
@@ -210,9 +246,10 @@
                   
          if (setting.breakOverlay.display) {
             initializeOverlay();
-            //bind timeupdate handle for displaying break overlays
-            player.on("timeupdate", updateBreakOverlay);
+            
          }
+         
+         player.on("timeupdate", onTimeUpdate);
       }
       
       // setup the plugin after we loaded video's meta data
