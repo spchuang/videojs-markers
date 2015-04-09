@@ -96,6 +96,9 @@
             marker.div.on('click', function(e) {
                var key = $(this).data('marker-index');
                player.currentTime(markers[key].time);
+
+               if (marker.onMarkerClicked)
+                  marker.onMarkerClicked();
             });
             
             if (setting.markerTip.display) {
