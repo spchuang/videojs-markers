@@ -1,4 +1,4 @@
-/*! videojs-markers - v0.4.0 - 2015-04-09
+/*! videojs-markers - v0.4.0 - 2015-03-13
 * Copyright (c) 2015 ; Licensed  */
 /*! videojs-markers !*/
 'use strict'; 
@@ -98,9 +98,6 @@
             marker.div.on('click', function(e) {
                var key = $(this).data('marker-index');
                player.currentTime(markers[key].time);
-
-               if (marker.onMarkerClicked)
-                  marker.onMarkerClicked();
             });
             
             if (setting.markerTip.display) {
