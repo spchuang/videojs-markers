@@ -13,6 +13,7 @@
     "video",
     "player"
   ],
+  "license": "MIT",
   "ignore": [
     "**/.*",
     "*.png",
