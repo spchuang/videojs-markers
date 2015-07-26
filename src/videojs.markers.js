@@ -1,9 +1,25 @@
+/*! videojs-markers - v0.4.0 - 2015-03-13
+* Copyright (c) 2015 ; Licensed  */
 /*! videojs-markers !*/
 'use strict'; 
 
 (function($, videojs, undefined) {
    //default setting
-   var defaultSetting = {
+   var defaultSetting = { 
+      format : {
+         setTime : function(object, time){
+            object.time = time;
+         },
+         time : function(object){
+            return object.time;
+         },
+         setText : function(object, text){
+            object.text = text;
+         },
+         text : function(object){
+            return object.text;
+         }
+      },
       markerStyle: {
          'width':'7px',
          'border-radius': '30%',
@@ -12,7 +28,7 @@
       markerTip: {
          display: true,
          text: function(marker) {
-            return "Break: "+ marker.text;
+            return "Break: "+ setting.format.text(marker);
          }
       },
       breakOverlay:{
@@ -61,15 +77,14 @@
           
       function sortMarkersList() {
          // sort the list by time in asc order
-         markersList.sort(function(a, b){return a.time - b.time});
+         markersList.sort(function(a, b){return setting.format.time(a) - setting.format.time(b)});
       }
       
       function addMarkers(newMarkers) {
          // create the markers
          var duration = player.duration();
-         
          $.each(newMarkers, function(index, marker) {
-            marker.position = (marker.time / duration) * 100;
+            marker.position = (setting.format.time(marker) / duration) * 100;
             marker.key = generateUUID();
             marker.div = $("<div class='vjs-marker' data-marker-index='" + marker.key + "'></div>");
             
@@ -82,7 +97,7 @@
                marker.div.addClass(marker.class);
             }
             
-            marker.text = marker.text || "";
+            setting.format.setText(marker, setting.format.text(marker) || "");
             marker.overlayText = marker.overlayText || "";
             
             videoWrapper.find('.vjs-progress-control').append(marker.div);
@@ -95,8 +110,7 @@
             //bind click event to seek to marker time
             marker.div.on('click', function(e) {
                var key = $(this).data('marker-index');
-               player.currentTime(markers[key].time);
-
+               player.currentTime(setting.format.time(markers[key]));
                if (marker.onClick) {
                   marker.onClick(marker);
                }
@@ -144,7 +158,6 @@
       
       // attach hover event handler
       function registerMarkerTipHandler(markerDiv) {
-         
          markerDiv.on('mouseover', function(){
             var id = $(this).data('marker-index');
             
@@ -167,14 +180,13 @@
       
       // show or hide break overlays
       function updateBreakOverlay(currentTime) {
-         if(currentMarkerIndex < 0){
+         if(!currentMarkerIndex){
             return;
          }
          
          var marker = markersList[currentMarkerIndex];
-      
-         if (currentTime >= marker.time && 
-               currentTime <= (marker.time + setting.breakOverlay.displayTime)) {
+         if (currentTime >= setting.format.time(marker) && 
+               currentTime <= (setting.format.time(marker) + setting.breakOverlay.displayTime)) {
 
             if (overlayIndex != currentMarkerIndex){
                overlayIndex = currentMarkerIndex;
@@ -207,17 +219,17 @@
          var newMarkerIndex;
          
          //check first marker, no marker is selected
-         if (markersList.length > 0 && currentTime < markersList[0].time) {
+         if (markersList.length > 0 && currentTime < setting.format.time(markersList[0])) {
             newMarkerIndex = -1;
          } else {
             for (var i = 0; i < markersList.length; i++) {
                // next marker time of last marker would be end of video time
                var nextMarkerTime = player.duration();
                if (i < markersList.length - 1) {
-                  nextMarkerTime = markersList[i + 1].time;
+                  nextMarkerTime = setting.format.time(markersList[i + 1]);
                } 
                
-               if(currentTime >= markersList[i].time && currentTime < nextMarkerTime) {
+               if(currentTime >= setting.format.time(markersList[i]) && currentTime < nextMarkerTime) {
                   newMarkerIndex = i;
                }
             }
@@ -243,7 +255,6 @@
          if (setting.markerTip.display) {
             initializeMarkerTip();
          }
-      
          // remove existing markers if already initialized
          player.markers.removeAll();
          addMarkers(options.markers);
@@ -263,12 +274,15 @@
       
       // exposed plugin API
       player.markers = {
+         setFormat : function(format){
+            setting.format = format;
+         },
          next : function() {
             // go to the next marker from current timestamp
             var currentTime = player.currentTime();
             for (var i = 0; i < markersList.length; i++) {
-               if (markersList[i].time > currentTime) {
-                  player.currentTime(markersList[i].time);
+               if (setting.format.time(markersList[i]) > currentTime) {
+                  player.currentTime(setting.format.time(markersList[i]));
                   return false;
                }
             }
@@ -278,14 +292,13 @@
             var currentTime = player.currentTime();
             for (var i = markersList.length - 1; i >=0 ; i--) {
                // add a threshold
-               if (markersList[i].time + 0.5 < currentTime) {
-                  player.currentTime(markersList[i].time);
+               if (setting.format.time(markersList[i]) + 0.5 < currentTime) {
+                  player.currentTime(setting.format.time(markersList[i].time));
                   return false;
                }
             }
          },
          add : function(newMarkers) {
-            // add new markers given an array of index
             addMarkers(newMarkers);
          },
          remove: function(indexArray) {
