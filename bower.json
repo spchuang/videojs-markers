@@ -1,0 +1,39 @@
+{
+  "name": "videojs-marker",
+  "description": "video marker breaks plugin for video.js",
+  "homepage": "https://github.com/spchuang/videojs-markers",
+  "version": "0.5.0",
+  "main": [
+    "dist/videojs-markers.js",
+    "dist/videojs-markers.css"
+  ],
+  "ignore": [
+      "src",
+      ".gitignore",
+      "demo",
+      "screenshot.png",
+      "LICENSE-MIT",
+      "bower.json",
+      "Gruntfile.js",
+      "package.json",
+      "README.md"
+   ],
+  "dependencies"  : {
+     "videojs": ">=4.0",
+     "jquery": ">=1.10.2"
+  },
+  "license": "MIT",
+  "keywords": [
+    "videojs",
+    "tags",
+    "marker",
+    "video",
+    "player"
+  ],
+  "ignore": [
+    "**/.*",
+    "*.png",
+    "src",
+    "demo"
+  ]
+}
