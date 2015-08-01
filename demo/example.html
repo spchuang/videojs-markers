@@ -26,6 +26,7 @@
   <div class='prev'>Prev</div>
   <div class='remove'>Remove</div>
   <div class='add'>Add</div>
+  <div class='updateTime'>Move all markers right by 1 sec</div>
   <div class='reset'>Reset</div>
   <div class='destroy'>Destroy</div>
 </body>
@@ -53,7 +54,7 @@
          }
       },
       onMarkerReached: function(marker) {
-        alert("OK"); 
+        console.log("REACHED " + marker.text);
       },
       markers: [
          {
@@ -94,6 +95,14 @@
             text: "I'm NEW"
          }]);
    });
+   $(".updateTime").click(function(){
+      var markers = player.markers.getMarkers();
+      for (var i = 0; i < markers.length; i++) {
+         markers[i].time += 1;
+      }
+      player.markers.updateTime();
+   });
+   
    $(".reset").click(function(){
       player.markers.reset([{
             time: 40,
