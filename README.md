@@ -15,6 +15,17 @@ JSBin Demo can be found [here] (http://jsbin.com/befob/7/edit)
 * Flexible styling
 * Support dynamically adding and removing markers
 
+## Download
+
+* Download master with git 
+    
+    git clone git@github.com:spchuang/videojs-markers.git
+
+* Download zip/tar files for newest release
+* Download through bower
+
+    bower install videojs-markers
+
 ## Quick Start
 Add the 'videojs.markers.js' plugin and stylesheet after including videojs script and jQuery library
 
