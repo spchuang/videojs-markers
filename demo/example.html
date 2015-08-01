@@ -9,6 +9,19 @@
          border: thin solid #777;
          padding: 10px;
       }
+      .video-js{
+         float:left;
+      }
+      .event-list {
+         float:left;
+         border: black;
+         margin-left: 5px;
+         width: 200px;
+         
+      }
+      .control{
+         clear: both;
+      }
    </style>
    <link href="http://vjs.zencdn.net/4.3/video-js.css" rel="stylesheet">
    <link href="../dist/videojs.markers.css" rel="stylesheet">
@@ -17,18 +30,26 @@
 <body>
 
   <p>This is a demo of video-markers plugin for videojs</p>
-
-  <video id="test_video" controls preload="none" class="video-js vjs-default-skin" width="640" height="264">
-      <source src="http://vjs.zencdn.net/v/oceans.mp4" type="video/mp4">
-      <source src="http://vjs.zencdn.net/v/oceans.webm" type="video/webm">
-    </video>
-  <div class='next'>Next</div>
-  <div class='prev'>Prev</div>
-  <div class='remove'>Remove</div>
-  <div class='add'>Add</div>
-  <div class='updateTime'>Move all markers right by 1 sec</div>
-  <div class='reset'>Reset</div>
-  <div class='destroy'>Destroy</div>
+  
+  <div>
+     <video id="test_video" controls preload="none" class="video-js vjs-default-skin" width="640" height="264">
+         <source src="http://vjs.zencdn.net/v/oceans.mp4" type="video/mp4">
+         <source src="http://vjs.zencdn.net/v/oceans.webm" type="video/webm">
+     </video>
+     <div class='event-list'>
+        <div><b>Events: </b></div>
+     </div>
+  </div>
+  
+  <div class="control">
+     <div class='next'>Next</div>
+     <div class='prev'>Prev</div>
+     <div class='remove'>Remove</div>
+     <div class='add'>Add</div>
+     <div class='updateTime'>Move all markers right by 1 sec</div>
+     <div class='reset'>Reset</div>
+     <div class='destroy'>Destroy</div>
+  </div>
 </body>
 <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
 <script src="http://vjs.zencdn.net/4.3/video.js"></script>
@@ -54,7 +75,12 @@
          }
       },
       onMarkerReached: function(marker) {
-        console.log("REACHED " + marker.text);
+         $('.event-list').append("<div>marker reached: " + marker.text + "</div>");
+        
+      },
+      onMarkerClick: function(marker){
+         $('.event-list').append("<div>marker clicked: " + marker.text + "</div>");
+
       },
       markers: [
          {

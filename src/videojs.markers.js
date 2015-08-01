@@ -32,6 +32,7 @@
             'font-size': '17px'
          }
       },
+      onMarkerClick: function(marker) {},
       onMarkerReached: function(marker) {},
       markers: []
    };
@@ -105,13 +106,13 @@
          // bind click event to seek to marker time
          markerDiv.on('click', function(e) {
             
-            var seekTime = true;
-            if (typeof marker.onClick === "function") {
+            var preventDefault = false;
+            if (typeof setting.onMarkerClick === "function") {
                // if return false, prevent default behavior
-               seekTime = marker.onClick(marker);
+               preventDefault = setting.onMarkerClick(marker) == false;
             }
             
-            if (seekTime) {
+            if (!preventDefault) {
                var key = $(this).data('marker-key');
                player.currentTime(setting.markerTip.time(markersMap[key]));
             }
@@ -311,7 +312,7 @@
       
       // exposed plugin API
       player.markers = {
-         getMarkers: function(){
+         getMarkers: function() {
            return markersList;
          },
          next : function() {
