@@ -58,7 +58,7 @@ The style of the markers could be modified by passing an optional setting "marke
    
 ## History
 - 0.5.0
-   - add 'onMarkerClick' callback handler
+   - add 'onMarkerClick' callback handler. When this returns false, the default behavior of seeking to the marker time will be prevented.
    - add new 'getMarkers' API 
    - remove constraints of using 'time' as the marker time attribute. Instead, a new markertip.time() function is added to resolve the time dynamically. This mean the time attribute can be represented in different attributes. This also made marker times modifiable (see new demo file). Note that the UI position of the marker will only be updated after you call marker.players.updateTime().
 - 0.4
