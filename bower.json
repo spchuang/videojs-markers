@@ -5,7 +5,7 @@
   "version": "0.5.0",
   "main": [
     "dist/videojs-markers.js",
-    "dist/videojs-markers.css"
+    "dist/videojs.markers.css"
   ],
   "ignore": [
       "src",
