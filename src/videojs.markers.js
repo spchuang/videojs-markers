@@ -197,17 +197,17 @@
       }
       
       // show or hide break overlays
-      function updateBreakOverlay(currentTime) {
-         if(currentMarkerIndex < 0){
+      function updateBreakOverlay() {
+         if(!setting.breakOverlay.display || currentMarkerIndex < 0){
             return;
          }
          
+         var currentTime = player.currentTime();
          var marker = markersList[currentMarkerIndex];
          var markerTime = setting.markerTip.time(marker);
-      
+         
          if (currentTime >= markerTime && 
             currentTime <= (markerTime + setting.breakOverlay.displayTime)) {
-
             if (overlayIndex != currentMarkerIndex){
                overlayIndex = currentMarkerIndex;
                breakOverlay.find('.vjs-break-overlay-text').text(setting.breakOverlay.text(marker));
@@ -230,6 +230,11 @@
       }
       
       function onTimeUpdate() {
+         onUpdateMarker();
+         updateBreakOverlay();
+      }
+      
+      function onUpdateMarker() {
          /*
              check marker reached in between markers
              the logic here is that it triggers a new marker reached event only if the player 
@@ -287,10 +292,6 @@
             currentMarkerIndex = newMarkerIndex;
          }
          
-         // update overlay
-         if(setting.breakOverlay.display) {
-            updateBreakOverlay(currentTime);
-         }
       }
       
       // setup the whole thing
