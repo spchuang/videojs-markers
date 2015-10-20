@@ -253,6 +253,12 @@
                currentTime < nextMarkerTime) {
                return;
             }
+            
+            // check for ending (at the end current time equals player duration)
+            if (currentMarkerIndex === markersList.length -1 &&
+               currentTime === player.duration()) {
+               return;
+            }
          }
          
          // check first marker, no marker is selected
@@ -266,7 +272,6 @@
                
                if(currentTime >= setting.markerTip.time(markersList[i]) &&
                   currentTime < nextMarkerTime) {
-                  
                   newMarkerIndex = i;
                   break;
                }
