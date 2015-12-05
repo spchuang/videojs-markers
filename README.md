@@ -65,6 +65,8 @@ The style of the markers could be modified by passing an optional setting "marke
     });
    
 ## History
+- 0.6.0
+   - add useMarkerStyle option (default=true). Set this option to false to handle the markers style with css only.
 - 0.5.0
    - add 'onMarkerClick' callback handler. When this returns false, the default behavior of seeking to the marker time will be prevented.
    - add new 'getMarkers' API 

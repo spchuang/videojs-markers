@@ -93,12 +93,16 @@
       }
       
       function createMarkerDiv(marker, duration) {
-         var markerDiv = $("<div class='vjs-marker'></div>")
-         markerDiv.css(setting.markerStyle)
-            .css({"margin-left" : -parseFloat(markerDiv.css("width"))/2 + 'px', 
-               "left" : getPosition(marker) + '%'})
-            .attr("data-marker-key", marker.key)
-            .attr("data-marker-time", setting.markerTip.time(marker));
+         var markerDiv = $("<div class='vjs-marker'></div>");
+         if (true === setting.markerStyle) {
+             markerDiv.css(setting.markerStyle);
+         }
+         markerDiv.css({
+             "margin-left": -parseFloat(markerDiv.css("width")) / 2 + 'px',
+             "left": getPosition(marker) + '%'
+         })
+             .attr("data-marker-key", marker.key)
+             .attr("data-marker-time", setting.markerTip.time(marker));
             
          // add user-defined class to marker
          if (marker.class) {
