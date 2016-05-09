@@ -1,7 +1,7 @@
 {
   "name": "videojs-markers",
   "description": "video marker breaks plugin for video.js",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-contrib-clean": "latest",
