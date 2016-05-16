@@ -210,7 +210,7 @@
             currentTime <= (markerTime + setting.breakOverlay.displayTime)) {
             if (overlayIndex != currentMarkerIndex){
                overlayIndex = currentMarkerIndex;
-               breakOverlay.find('.vjs-break-overlay-text').text(setting.breakOverlay.text(marker));
+               breakOverlay.find('.vjs-break-overlay-text').html(setting.breakOverlay.text(marker));
             }
             
             breakOverlay.css('visibility', "visible");
