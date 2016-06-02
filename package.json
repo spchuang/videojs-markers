@@ -4,7 +4,7 @@
   "version": "0.5.0",
   "peerDependencies": {
     "video-js": "4.0",
-    "jQuery": "1.10.2"
+    "jquery": "1.10.2"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
