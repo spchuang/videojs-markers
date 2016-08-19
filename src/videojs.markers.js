@@ -2,6 +2,9 @@
 'use strict'; 
 
 (function($, videojs, undefined) {
+   //constants 
+   var UPDATE_PERIOD = 0.3; // approx max period of timeupdate event is 250 ms
+
    //default setting
    var defaultSetting = {
       markerStyle: {
@@ -287,7 +290,12 @@
          if (newMarkerIndex != currentMarkerIndex) {
             // trigger event
             if (newMarkerIndex != -1 && options.onMarkerReached) {
-              options.onMarkerReached(markersList[newMarkerIndex]);
+               var nextMarker = markersList[newMarkerIndex];
+               // do not auto trigger when user jumps over marker(s)
+               var triggerAccuracy = UPDATE_PERIOD * player.playbackRate();
+               if (Math.abs(currentTime - setting.markerTip.time(nextMarker)) <= triggerAccuracy) {
+                  options.onMarkerReached(nextMarker);
+               }
             }
             currentMarkerIndex = newMarkerIndex;
          }
