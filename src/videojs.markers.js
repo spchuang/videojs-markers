@@ -2,7 +2,7 @@
 'use strict'; 
 
 (function($, videojs, undefined) {
-   var currentMarkerIndexInitValue = -1;
+   var Marker_Index_Init_Value = -1;
 
    //default setting
    var defaultSetting = {
@@ -59,7 +59,7 @@
           markersMap   = {},
           markersList  = [], // list of markers sorted by time
           videoWrapper = $(this.el()),
-          currentMarkerIndex  = currentMarkerIndexInitValue, 
+          currentMarkerIndex  = Marker_Index_Init_Value, 
           player       = this,
           markerTip    = null,
           breakOverlay = null,
@@ -148,7 +148,7 @@
              overlayIndex = -1;
              breakOverlay.css("visibility", "hidden");
          }
-         currentMarkerIndex = currentMarkerIndexInitValue;
+         currentMarkerIndex = Marker_Index_Init_Value;
 
          for (var i = 0; i < indexArray.length; i++) {
             var index = indexArray[i];
@@ -254,9 +254,9 @@
             return player.duration();
          }
          var currentTime = player.currentTime();
-         var newMarkerIndex = currentMarkerIndexInitValue;
+         var newMarkerIndex = Marker_Index_Init_Value;
          
-         if (currentMarkerIndex != currentMarkerIndexInitValue) {
+         if (currentMarkerIndex != Marker_Index_Init_Value) {
             // check if staying at same marker
             var nextMarkerTime = getNextMarkerTime(currentMarkerIndex);
             if(currentTime >= setting.markerTip.time(markersList[currentMarkerIndex]) &&
@@ -288,7 +288,7 @@
          // set new marker index
          if (newMarkerIndex != currentMarkerIndex) {
             // trigger event
-            if (newMarkerIndex != -1 && options.onMarkerReached) {
+            if (newMarkerIndex != Marker_Index_Init_Value && options.onMarkerReached) {
               options.onMarkerReached(markersList[newMarkerIndex]);
             }
             currentMarkerIndex = newMarkerIndex;
