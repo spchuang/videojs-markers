@@ -2,6 +2,8 @@
 'use strict'; 
 
 (function($, videojs, undefined) {
+   var Marker_Index_Init_Value = -1;
+
    //default setting
    var defaultSetting = {
       markerStyle: {
@@ -57,7 +59,7 @@
           markersMap   = {},
           markersList  = [], // list of markers sorted by time
           videoWrapper = $(this.el()),
-          currentMarkerIndex  = -1, 
+          currentMarkerIndex  = Marker_Index_Init_Value, 
           player       = this,
           markerTip    = null,
           breakOverlay = null,
@@ -146,7 +148,7 @@
              overlayIndex = -1;
              breakOverlay.css("visibility", "hidden");
          }
-         currentMarkerIndex = -1;
+         currentMarkerIndex = Marker_Index_Init_Value;
 
          for (var i = 0; i < indexArray.length; i++) {
             var index = indexArray[i];
@@ -240,7 +242,10 @@
              the logic here is that it triggers a new marker reached event only if the player 
              enters a new marker range (e.g. from marker 1 to marker 2). Thus, if player is on marker 1 and user clicked on marker 1 again, no new reached event is triggered)
          */
-         
+         if (!markersList.length) {
+             return;
+         }
+
          var getNextMarkerTime = function(index) {
             if (index < markersList.length - 1) {
                return setting.markerTip.time(markersList[index + 1]);
@@ -249,9 +254,9 @@
             return player.duration();
          }
          var currentTime = player.currentTime();
-         var newMarkerIndex;
+         var newMarkerIndex = Marker_Index_Init_Value;
          
-         if (currentMarkerIndex != -1) {
+         if (currentMarkerIndex != Marker_Index_Init_Value) {
             // check if staying at same marker
             var nextMarkerTime = getNextMarkerTime(currentMarkerIndex);
             if(currentTime >= setting.markerTip.time(markersList[currentMarkerIndex]) &&
@@ -267,10 +272,7 @@
          }
          
          // check first marker, no marker is selected
-         if (markersList.length > 0 &&
-            currentTime < setting.markerTip.time(markersList[0])) {
-            newMarkerIndex = -1;
-         } else {
+         if (currentTime >= setting.markerTip.time(markersList[0])) {
             // look for new index
             for (var i = 0; i < markersList.length; i++) {
                nextMarkerTime = getNextMarkerTime(i);
@@ -286,7 +288,7 @@
          // set new marker index
          if (newMarkerIndex != currentMarkerIndex) {
             // trigger event
-            if (newMarkerIndex != -1 && options.onMarkerReached) {
+            if (newMarkerIndex != Marker_Index_Init_Value && options.onMarkerReached) {
               options.onMarkerReached(markersList[newMarkerIndex]);
             }
             currentMarkerIndex = newMarkerIndex;
