@@ -50,6 +50,8 @@
       return uuid;
    };
 
+   const NULL_INDEX = -1;
+
    function registerVideoJsMarkersPlugin(options) {
       /**
        * register the markers plugin (dependent on jquery)
@@ -59,11 +61,11 @@
           markersMap   = {},
           markersList  = [], // list of markers sorted by time
           videoWrapper = $(this.el()),
-          currentMarkerIndex  = -1,
+          currentMarkerIndex  = NULL_INDEX,
           player       = this,
           markerTip    = null,
           breakOverlay = null,
-          overlayIndex = -1;
+          overlayIndex = NULL_INDEX;
 
       function sortMarkersList() {
          // sort the list by time in asc order
@@ -145,10 +147,10 @@
       function removeMarkers(indexArray) {
          // reset overlay
          if (breakOverlay){
-             overlayIndex = -1;
+             overlayIndex = NULL_INDEX;
              breakOverlay.css("visibility", "hidden");
          }
-         currentMarkerIndex = -1;
+         currentMarkerIndex = NULL_INDEX;
 
          for (var i = 0; i < indexArray.length; i++) {
             var index = indexArray[i];
@@ -218,7 +220,7 @@
             breakOverlay.css('visibility', "visible");
 
          } else {
-            overlayIndex = -1;
+            overlayIndex = NULL_INDEX;
             breakOverlay.css("visibility", "hidden");
          }
       }
@@ -228,7 +230,7 @@
          breakOverlay = $("<div class='vjs-break-overlay'><div class='vjs-break-overlay-text'></div></div>")
             .css(setting.breakOverlay.style);
          videoWrapper.append(breakOverlay);
-         overlayIndex = -1;
+         overlayIndex = NULL_INDEX;
       }
 
       function onTimeUpdate() {
@@ -252,9 +254,9 @@
             return player.duration();
          }
          var currentTime = player.currentTime();
-         var newMarkerIndex;
+         var newMarkerIndex = NULL_INDEX;
 
-         if (currentMarkerIndex != -1) {
+         if (currentMarkerIndex != NULL_INDEX) {
             // check if staying at same marker
             var nextMarkerTime = getNextMarkerTime(currentMarkerIndex);
             if(currentTime >= setting.markerTip.time(markersList[currentMarkerIndex]) &&
@@ -263,7 +265,7 @@
             }
 
             // check for ending (at the end current time equals player duration)
-            if (currentMarkerIndex === markersList.length -1 &&
+            if (currentMarkerIndex === markersList.length - 1 &&
                currentTime === player.duration()) {
                return;
             }
@@ -272,7 +274,7 @@
          // check first marker, no marker is selected
          if (markersList.length > 0 &&
             currentTime < setting.markerTip.time(markersList[0])) {
-            newMarkerIndex = -1;
+            newMarkerIndex = NULL_INDEX;
          } else {
             // look for new index
             for (var i = 0; i < markersList.length; i++) {
@@ -289,7 +291,7 @@
          // set new marker index
          if (newMarkerIndex != currentMarkerIndex) {
             // trigger event
-            if (newMarkerIndex != -1 && options.onMarkerReached) {
+            if (newMarkerIndex != NULL_INDEX && options.onMarkerReached) {
               options.onMarkerReached(markersList[newMarkerIndex], newMarkerIndex);
             }
             currentMarkerIndex = newMarkerIndex;

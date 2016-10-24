@@ -46,7 +46,7 @@
    // initialize video.js
    var player = videojs('test_video');
 
-   var allowedMarker = -1;
+   var allowedMarkerIndex = -1;
    var prevTime = 0;
    //load the marker plugin
    player.markers({
@@ -85,19 +85,20 @@
             text: ":)"
          }
       ],
-      onMarkerReached: function(marker, index) {
+      onMarkerReached: function(marker, newMarkerIndex) {
          $('.event-list').append("<div>marker reached: " + marker.text + "</div>");
 
          // prevent seeking if user has not seen the marker.
-         if (index > allowedMarker) {
+         if (newMarkerIndex > allowedMarkerIndex) {
            // allow natural video play withou user actively seeking. Only allowing
            // viewing one marker at a time.
            if (
-             index == allowedMarker + 1 &&
-             player.currentTime() - prevTime < 0.5 /* time update threshould */
+             newMarkerIndex == allowedMarkerIndex + 1 &&
+             player.currentTime() - prevTime < 0.5 /* time update threshold */
            ) {
              allowedMarker++;
            } else {
+             // reset to previous play time
              player.currentTime(prevTime);
            }
          }
