@@ -1,4 +1,4 @@
-/*! videojs-markers - v0.6.0 - 2016-10-24
+/*! videojs-markers - v0.6.1 - 2016-10-24
 * Copyright (c) 2016 ; Licensed  */
 'use strict';
 
@@ -78,7 +78,7 @@
       newMarkers.forEach(function (marker) {
         marker.key = generateUUID();
 
-        videoWrapper.find('.vjs-progress-control').append(createMarkerDiv(marker));
+        videoWrapper.find('.vjs-progress-holder').append(createMarkerDiv(marker));
 
         // store marker in an internal hash map
         markersMap[marker.key] = marker;
@@ -180,7 +180,7 @@
           // margin-left needs to minus the padding length to align correctly with the marker
           markerTip.css({
             "left": getPosition(marker) + '%',
-            "margin-left": -parseFloat(markerTip.css("width")) / 2 - 5 + 'px',
+            "margin-left": -parseFloat(markerTip.width()) / 2 - 5 + 'px',
             "visibility": "visible"
           });
         }
@@ -193,7 +193,7 @@
 
     function initializeMarkerTip() {
       markerTip = $("<div class='vjs-tip'><div class='vjs-tip-arrow'></div><div class='vjs-tip-inner'></div></div>");
-      videoWrapper.find('.vjs-progress-control').append(markerTip);
+      videoWrapper.find('.vjs-progress-holder').append(markerTip);
     }
 
     // show or hide break overlays

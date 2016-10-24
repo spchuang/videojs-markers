@@ -7,6 +7,7 @@
   transition: opacity .2s ease;
   -webkit-transition: opacity .2s ease;
   -moz-transition: opacity .2s ease;
+  z-index: 100;
 }
 .vjs-marker:hover {
   cursor: pointer;

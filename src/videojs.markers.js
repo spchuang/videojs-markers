@@ -89,7 +89,7 @@ type Marker = {
       newMarkers.forEach((marker: Marker) => {
         marker.key = generateUUID();
 
-        videoWrapper.find('.vjs-progress-control')
+        videoWrapper.find('.vjs-progress-holder')
           .append(createMarkerDiv(marker));
 
         // store marker in an internal hash map
@@ -198,7 +198,7 @@ type Marker = {
           // margin-left needs to minus the padding length to align correctly with the marker
           markerTip.css({
             "left" : getPosition(marker) + '%',
-            "margin-left" : -parseFloat(markerTip.css("width")) / 2 - 5 + 'px',
+            "margin-left" : -parseFloat(markerTip.width()) / 2 - 5 + 'px',
             "visibility"  : "visible",
           });
         }
@@ -212,7 +212,7 @@ type Marker = {
 
     function initializeMarkerTip(): void {
       markerTip = $("<div class='vjs-tip'><div class='vjs-tip-arrow'></div><div class='vjs-tip-inner'></div></div>");
-      videoWrapper.find('.vjs-progress-control').append(markerTip);
+      videoWrapper.find('.vjs-progress-holder').append(markerTip);
     }
 
     // show or hide break overlays
