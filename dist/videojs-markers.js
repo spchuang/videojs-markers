@@ -184,10 +184,10 @@
             "visibility": "visible"
           });
         }
-      }).on('mouseout', function () {
-        if (!!markerTip) {
-          markerTip.css("visibility", "hidden");
-        }
+      });
+
+      markerDiv.on('mouseout', function () {
+        !!markerTip && markerTip.css("visibility", "hidden");
       });
     }
 
@@ -315,13 +315,13 @@
       next: function next() {
         // go to the next marker from current timestamp
         var currentTime = player.currentTime();
-        for (var i = 0; i < markersList.length; i++) {
-          var markerTime = setting.markerTip.time(markersList[i]);
+        markersList.forEach(function (marker) {
+          var markerTime = setting.markerTip.time(marker);
           if (markerTime > currentTime) {
             player.currentTime(markerTime);
-            break;
+            return;
           }
-        }
+        });
       },
       prev: function prev() {
         // go to previous marker
@@ -331,7 +331,7 @@
           // add a threshold
           if (markerTime + 0.5 < currentTime) {
             player.currentTime(markerTime);
-            break;
+            return;
           }
         }
       },

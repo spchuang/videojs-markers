@@ -10,6 +10,8 @@ type Marker = {
   text?: string,
   class?: string,
   overlayText?: string,
+  // private property
+  key: string,
 };
 
 (function($, videojs, undefined) {
@@ -67,8 +69,8 @@ type Marker = {
      */
 
     let setting = $.extend(true, {}, defaultSetting, options),
-        markersMap: {[key:string]: Object} = {},
-        markersList: Array<Object>  = [], // list of markers sorted by time
+        markersMap: {[key:string]: Marker} = {},
+        markersList: Array<Marker>  = [], // list of markers sorted by time
         videoWrapper = $(this.el()),
         currentMarkerIndex  = NULL_INDEX,
         player       = this,
@@ -83,8 +85,8 @@ type Marker = {
       });
     }
 
-    function addMarkers(newMarkers: Array<Object>): void {
-      newMarkers.forEach((marker: Object) => {
+    function addMarkers(newMarkers: Array<Marker>): void {
+      newMarkers.forEach((marker: Marker) => {
         marker.key = generateUUID();
 
         videoWrapper.find('.vjs-progress-control')
@@ -98,11 +100,11 @@ type Marker = {
       sortMarkersList();
     }
 
-    function getPosition(marker: Object): number {
+    function getPosition(marker: Marker): number {
       return (setting.markerTip.time(marker) / player.duration()) * 100;
     }
 
-    function createMarkerDiv(marker: Object): Object {
+    function createMarkerDiv(marker: Marker): Object {
       var markerDiv = $("<div class='vjs-marker'></div>");
       markerDiv
         .css(setting.markerStyle)
@@ -141,7 +143,7 @@ type Marker = {
 
     function updateMarkers(): void {
       // update UI for markers whose time changed
-      markersList.forEach((marker: Object) => {
+      markersList.forEach((marker: Marker) => {
         var markerDiv = videoWrapper.find(".vjs-marker[data-marker-key='" + marker.key +"']");
         var markerTime = setting.markerTip.time(marker);
 
@@ -342,13 +344,13 @@ type Marker = {
 
     // exposed plugin API
     player.markers = {
-      getMarkers: function() {
+      getMarkers: function(): Array<Marker> {
         return markersList;
       },
-      next : function() {
+      next : function(): void {
         // go to the next marker from current timestamp
         const currentTime = player.currentTime();
-        markersList.forEach((marker: Object) => {
+        markersList.forEach((marker: Marker) => {
           const markerTime = setting.markerTip.time(marker);
           if (markerTime > currentTime) {
             player.currentTime(markerTime);
@@ -356,7 +358,7 @@ type Marker = {
           }
         });
       },
-      prev : function() {
+      prev : function(): void {
         // go to previous marker
         const currentTime = player.currentTime();
         for (var i = markersList.length - 1; i >= 0 ; i--) {
@@ -368,31 +370,31 @@ type Marker = {
           }
         }
       },
-      add : function(newMarkers) {
+      add : function(newMarkers: Array<Marker>): void {
         // add new markers given an array of index
         addMarkers(newMarkers);
       },
-      remove: function(indexArray) {
+      remove: function(indexArray: Array<number>): void {
         // remove markers given an array of index
         removeMarkers(indexArray);
       },
-      removeAll: function(){
+      removeAll: function(): void {
         var indexArray = [];
         for (var i = 0; i < markersList.length; i++) {
           indexArray.push(i);
         }
         removeMarkers(indexArray);
       },
-      updateTime: function(){
+      updateTime: function(): void {
         // notify the plugin to update the UI for changes in marker times
         updateMarkers();
       },
-      reset: function(newMarkers){
+      reset: function(newMarkers: Array<Marker>): void {
         // remove all the existing markers and add new ones
         player.markers.removeAll();
         addMarkers(newMarkers);
       },
-      destroy: function(){
+      destroy: function(): void {
         // unregister the plugins and clean up even handlers
         player.markers.removeAll();
         breakOverlay && breakOverlay.remove();
