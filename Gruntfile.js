@@ -4,14 +4,14 @@
 // all configuration goes inside this function
 module.exports = function(grunt) {
    'use strict';
-   
+
    var BUILD_JS_DIR  = 'dist/'
-   
+
    // ===========================================================================
    // CONFIGURE GRUNT ===========================================================
    // ===========================================================================
    grunt.initConfig({
-      
+
       // get the configuration info from package.json ----------------------------
       // this way we can use things like name and version (pkg.name)
       pkg: grunt.file.readJSON('package.json'),
@@ -48,6 +48,20 @@ module.exports = function(grunt) {
             dest: 'dist/<%= pkg.name %>.js'
          }
       },
+      babel: {
+          options: {
+            sourceMap: true,
+            presets: ['es2015'],
+            "plugins": [
+              "transform-flow-strip-types",
+              "syntax-trailing-function-commas"
+            ]
+          },
+          dist: {
+            src: 'dist/<%= pkg.name %>.js',
+            dest: 'dist/<%= pkg.name %>.js',
+          }
+      },
       uglify: {
          options: {
             banner: '<%= banner %>'
@@ -58,7 +72,7 @@ module.exports = function(grunt) {
          }
       }
    });
-   
+
    // ===========================================================================
    // LOAD GRUNT PLUGINS ========================================================
    // ===========================================================================
@@ -70,13 +84,13 @@ module.exports = function(grunt) {
    grunt.loadNpmTasks('grunt-contrib-watch');
    grunt.loadNpmTasks('grunt-contrib-uglify');
    grunt.loadNpmTasks('grunt-contrib-concat');
+   grunt.loadNpmTasks('grunt-babel')
 
    // ===========================================================================
    // CREATE TASKS ==============================================================
    // ===========================================================================
+
    grunt.registerTask('css', ['less', 'cssmin']);
-   
-   
-   grunt.registerTask('compile', ['css','concat','uglify'])
+   grunt.registerTask('compile', ['css','concat', 'babel:dist', 'uglify'])
 
 };

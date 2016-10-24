@@ -16,12 +16,12 @@
          width: 300px;
          margin-top: 10px;
       }
-      
+
       ul#marker-list li{
          position: relative;
          margin-bottom: -1px;
          background-color: #fff;
-         border: 1px solid #ddd;       
+         border: 1px solid #ddd;
       }
       ul#marker-list li:last-child {
          margin-bottom: 0;
@@ -42,7 +42,7 @@
    </style>
    <link href="http://vjs.zencdn.net/4.3/video-js.css" rel="stylesheet">
    <link href="../dist/videojs.markers.css" rel="stylesheet">
-   
+
 </head>
 <body>
 
@@ -52,15 +52,15 @@
       <source src="http://vjs.zencdn.net/v/oceans.mp4" type="video/mp4">
       <source src="http://vjs.zencdn.net/v/oceans.webm" type="video/webm">
   </video>
-  
+
   <ul id='marker-list'>
-   
+
   </ul>
-   
+
 </body>
 <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
 <script src="http://vjs.zencdn.net/4.3/video.js"></script>
-<script src='../src/videojs.markers.js'></script>
+<script src='../dist/videojs-markers.js'></script>
 
 <script>
    // initialize video.js
@@ -105,27 +105,27 @@
          }
       },
       onMarkerReached: function(marker) {
-        console.log(marker); 
+        console.log(marker);
       },
       markers: markers
    });
-   
+
    $(document).ready(function(){
       // insert marker list
       for(var i =0; i < markers.length; i++){
          var item = $("<li data-index='"+i+"'><a href='#'>"+markers[i].text+"</a></li>");
          $("#marker-list").append(item);
       }
-      
+
       // set up click event
       $("#marker-list li").click(function(){
          var index = $(this).data("index");
-      
+
          player.currentTime(markers[index].time);
       });
-      
+
    });
-   
-   
+
+
 </script>
 </html>

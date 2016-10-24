@@ -53,7 +53,7 @@
 </body>
 <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
 <script src="http://vjs.zencdn.net/4.3/video.js"></script>
-<script src='../src/videojs.markers.js'></script>
+<script src='../dist/videojs-markers.js'></script>
 
 <script>
    // initialize video.js
@@ -62,7 +62,7 @@
    //load the marker plugin
    player.markers({
       markerTip:{
-         display: false,
+         display: true,
          text: function(marker) {
             return "This is a break: " + marker.text;
          }
@@ -136,7 +136,7 @@
          },
          {
             time:20,
-            text: "Brank new"
+            text: "Brand new"
          }]);
    });
    $(".destroy").click(function(){

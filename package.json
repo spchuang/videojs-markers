@@ -6,13 +6,21 @@
     "video-js": "4.0",
     "jquery": "1.10.2"
   },
+  "scripts": {
+    "flow": "flow; test $? -eq 0 -o $? -eq 2"
+  },
   "devDependencies": {
+    "babel-plugin-syntax-trailing-function-commas": "6.13.0",
+    "babel-plugin-transform-flow-strip-types": "6.14.0",
+    "babel-preset-es2015": "6.16.0",
+    "flow": "0.2.3",
     "grunt": "^0.4.5",
+    "grunt-babel": "6.0.0",
     "grunt-contrib-clean": "latest",
+    "grunt-contrib-concat": "latest",
     "grunt-contrib-cssmin": "latest",
     "grunt-contrib-less": "latest",
-    "grunt-contrib-watch": "latest",
     "grunt-contrib-uglify": "latest",
-    "grunt-contrib-concat": "latest"
+    "grunt-contrib-watch": "latest"
   }
 }
