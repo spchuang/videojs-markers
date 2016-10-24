@@ -65,6 +65,8 @@ The style of the markers could be modified by passing an optional setting "marke
     });
 
 ## History
+- 0.7.0
+   - support videojs 5
 - 0.6.0
    - add index parameter to `onMarkerReached`
    - fix bugs where video crashes when played the second time
