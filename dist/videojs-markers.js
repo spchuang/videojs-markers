@@ -238,6 +238,10 @@
         the logic here is that it triggers a new marker reached event only if the player
         enters a new marker range (e.g. from marker 1 to marker 2). Thus, if player is on marker 1 and user clicked on marker 1 again, no new reached event is triggered)
       */
+      if (!markersList.length) {
+        return;
+      }
+
       var getNextMarkerTime = function getNextMarkerTime(index) {
         if (index < markersList.length - 1) {
           return setting.markerTip.time(markersList[index + 1]);
@@ -262,7 +266,7 @@
       }
 
       // check first marker, no marker is selected
-      if (markersList.length > 0 && currentTime < setting.markerTip.time(markersList[0])) {
+      if (currentTime < setting.markerTip.time(markersList[0])) {
         newMarkerIndex = NULL_INDEX;
       } else {
         // look for new index
