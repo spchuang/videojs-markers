@@ -7,7 +7,7 @@ A plugin that displays customizable markers upon progress bars of the video with
 ## Demo and Documentation
 See [here] (http://www.sampingchuang.com/videojs-markers)
 
-JSBin Demo can be found [here] (http://jsbin.com/befob/7/edit)
+JSBin Demo can be found [here] (http://jsbin.com/zeqiyoruwe/edit)
 
 ## Features
 * Display markers on progress bar, with hover-over tooltips
