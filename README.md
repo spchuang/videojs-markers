@@ -33,8 +33,8 @@ Add the 'videojs.markers.js' plugin and stylesheet after including videojs scrip
     <script src='../src/videojs.markers.js'></script>
 
 ### Basic usage: display break markers in the video.
-To add breaks in the video, simply add a new time (in seconds) in the list of breaks option. 
-   
+To add breaks in the video, simply add a new time (in seconds) in the list of breaks option.
+
     // initialize video.js
     var video = videojs('test_video');
 
@@ -48,8 +48,8 @@ To add breaks in the video, simply add a new time (in seconds) in the list of br
       ]
     });
 
-### Customize marker style: 
-The style of the markers could be modified by passing an optional setting "markerStyle" with your preference of css styles. 
+### Customize marker style:
+The style of the markers could be modified by passing an optional setting "markerStyle" with your preference of css styles.
 
     video.markers({
       markerStyle: {
@@ -63,11 +63,16 @@ The style of the markers could be modified by passing an optional setting "marke
          {time: 28,  text: "cool"}
       ]    
     });
-   
+
 ## History
+- 0.6.0
+   - add index parameter to `onMarkerReached`
+   - fix bugs where video crashes when played the second time
+   - break overlay uses `html` instead of `test`
+   - added babel && flow
 - 0.5.0
    - add 'onMarkerClick' callback handler. When this returns false, the default behavior of seeking to the marker time will be prevented.
-   - add new 'getMarkers' API 
+   - add new 'getMarkers' API
    - remove constraints of using 'time' as the marker time attribute. Instead, a new markertip.time() function is added to resolve the time dynamically. This mean the time attribute can be represented in different attributes. This also made marker times modifiable (see new demo file). Note that the UI position of the marker will only be updated after you call marker.players.updateTime().
 - 0.4
    - change display_time to displayTime
