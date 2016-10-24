@@ -5,9 +5,16 @@
 
 'use strict';
 
+type Marker = {
+  time: number,
+  text?: string,
+  class?: string,
+  overlayText?: string,
+};
+
 (function($, videojs, undefined) {
   // default setting
-  var defaultSetting = {
+  const defaultSetting = {
     markerStyle: {
       'width':'7px',
       'border-radius': '30%',
@@ -16,7 +23,7 @@
     markerTip: {
       display: true,
       text: function(marker) {
-        return "Break: "+ marker.text;
+        return "Break: " + marker.text;
       },
       time: function(marker) {
         return marker.time;
@@ -44,7 +51,7 @@
   // create a non-colliding random number
   function generateUUID(): string {
     var d = new Date().getTime();
-    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
       var r = (d + Math.random()*16)%16 | 0;
       d = Math.floor(d/16);
       return (c=='x' ? r : (r&0x3|0x8)).toString(16);
@@ -60,7 +67,7 @@
      */
 
     let setting = $.extend(true, {}, defaultSetting, options),
-        markersMap   = {},
+        markersMap: {[key:string]: Object} = {},
         markersList: Array<Object>  = [], // list of markers sorted by time
         videoWrapper = $(this.el()),
         currentMarkerIndex  = NULL_INDEX,
@@ -71,7 +78,7 @@
 
     function sortMarkersList(): void {
       // sort the list by time in asc order
-      markersList.sort(function(a, b){
+      markersList.sort((a, b) => {
         return setting.markerTip.time(a) - setting.markerTip.time(b);
       });
     }
@@ -180,7 +187,7 @@
 
     // attach hover event handler
     function registerMarkerTipHandler(markerDiv: Object): void {
-      markerDiv.on('mouseover', function() {
+      markerDiv.on('mouseover', () => {
         var marker = markersMap[$(markerDiv).data('marker-key')];
 
         if (!!markerTip) {
@@ -194,10 +201,10 @@
           });
         }
 
-      }).on('mouseout',function(){
-        if (!!markerTip) {
-          markerTip.css("visibility", "hidden");
-        }
+      });
+
+      markerDiv.on('mouseout',() => {
+        !!markerTip && markerTip.css("visibility", "hidden");
       });
     }
 
@@ -340,24 +347,24 @@
       },
       next : function() {
         // go to the next marker from current timestamp
-        var currentTime = player.currentTime();
-        for (var i = 0; i < markersList.length; i++) {
-          var markerTime = setting.markerTip.time(markersList[i]);
+        const currentTime = player.currentTime();
+        markersList.forEach((marker: Object) => {
+          const markerTime = setting.markerTip.time(marker);
           if (markerTime > currentTime) {
             player.currentTime(markerTime);
-            break;
+            return;
           }
-        }
+        });
       },
       prev : function() {
         // go to previous marker
-        var currentTime = player.currentTime();
-        for (var i = markersList.length - 1; i >=0 ; i--) {
+        const currentTime = player.currentTime();
+        for (var i = markersList.length - 1; i >= 0 ; i--) {
           var markerTime = setting.markerTip.time(markersList[i]);
           // add a threshold
           if (markerTime + 0.5 < currentTime) {
             player.currentTime(markerTime);
-            break;
+            return;
           }
         }
       },
