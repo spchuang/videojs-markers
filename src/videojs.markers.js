@@ -351,13 +351,13 @@ type Marker = {
       next : function(): void {
         // go to the next marker from current timestamp
         const currentTime = player.currentTime();
-        markersList.forEach((marker: Marker) => {
-          const markerTime = setting.markerTip.time(marker);
+        for (var i = 0; i < markersList.length; i++) {
+          var markerTime = setting.markerTip.time(markersList[i]);
           if (markerTime > currentTime) {
             player.currentTime(markerTime);
-            return;
+            break;
           }
-        });
+        }
       },
       prev : function(): void {
         // go to previous marker

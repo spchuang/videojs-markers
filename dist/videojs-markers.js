@@ -1,4 +1,4 @@
-/*! videojs-markers - v0.5.0 - 2016-10-24
+/*! videojs-markers - v0.6.0 - 2016-10-24
 * Copyright (c) 2016 ; Licensed  */
 'use strict';
 
@@ -319,13 +319,13 @@
       next: function next() {
         // go to the next marker from current timestamp
         var currentTime = player.currentTime();
-        markersList.forEach(function (marker) {
-          var markerTime = setting.markerTip.time(marker);
+        for (var i = 0; i < markersList.length; i++) {
+          var markerTime = setting.markerTip.time(markersList[i]);
           if (markerTime > currentTime) {
             player.currentTime(markerTime);
-            return;
+            break;
           }
-        });
+        }
       },
       prev: function prev() {
         // go to previous marker
