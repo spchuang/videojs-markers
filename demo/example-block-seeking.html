@@ -19,9 +19,6 @@
          width: 200px;
 
       }
-      .control{
-         clear: both;
-      }
    </style>
    <link href="http://vjs.zencdn.net/4.3/video-js.css" rel="stylesheet">
    <link href="../dist/videojs.markers.css" rel="stylesheet">
@@ -29,7 +26,7 @@
 </head>
 <body>
 
-  <p>This is a demo of video-markers plugin for videojs</p>
+  <p>This is a demo of video-markers plugin for videojs. This demo shows how we can block video seeking only when certain conditions are met. </p>
 
   <div>
      <video id="test_video" controls preload="none" class="video-js vjs-default-skin" width="640" height="264">
@@ -40,16 +37,6 @@
         <div><b>Events: </b></div>
      </div>
   </div>
-
-  <div class="control">
-     <div class='next'>Next</div>
-     <div class='prev'>Prev</div>
-     <div class='remove'>Remove</div>
-     <div class='add'>Add</div>
-     <div class='updateTime'>Move all markers right by 1 sec</div>
-     <div class='reset'>Reset</div>
-     <div class='destroy'>Destroy</div>
-  </div>
 </body>
 <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
 <script src="http://vjs.zencdn.net/4.3/video.js"></script>
@@ -59,6 +46,8 @@
    // initialize video.js
    var player = videojs('test_video');
 
+   var allowedMarker = -1;
+   var prevTime = 0;
    //load the marker plugin
    player.markers({
       markerTip:{
@@ -73,14 +62,6 @@
          text: function(marker) {
             return "This is an break overlay: " + marker.text;
          }
-      },
-      onMarkerReached: function(marker) {
-         $('.event-list').append("<div>marker reached: " + marker.text + "</div>");
-
-      },
-      onMarkerClick: function(marker){
-         $('.event-list').append("<div>marker clicked: " + marker.text + "</div>");
-
       },
       markers: [
          {
@@ -103,44 +84,31 @@
             time: 36,
             text: ":)"
          }
-      ]
-   });
+      ],
+      onMarkerReached: function(marker, index) {
+         $('.event-list').append("<div>marker reached: " + marker.text + "</div>");
 
-   $(".next").click(function(){
-      player.markers.next();
-   });
-   $(".prev").click(function(){
-      player.markers.prev();
-   });
-   $(".remove").click(function(){
-      player.markers.remove([1,2]);
-   })
-   $(".add").click(function(){
-      player.markers.add([{
-            time: 40,
-            text: "I'm NEW"
-         }]);
-   });
-   $(".updateTime").click(function(){
-      var markers = player.markers.getMarkers();
-      for (var i = 0; i < markers.length; i++) {
-         markers[i].time += 1;
-      }
-      player.markers.updateTime();
-   });
+         // prevent seeking if user has not seen the marker.
+         if (index > allowedMarker) {
+           // allow natural video play withou user actively seeking. Only allowing
+           // viewing one marker at a time.
+           if (
+             index == allowedMarker + 1 &&
+             player.currentTime() - prevTime < 0.5 /* time update threshould */
+           ) {
+             allowedMarker++;
+           } else {
+             player.currentTime(prevTime);
+           }
+         }
+      },
+      onMarkerClick: function(marker){
+         $('.event-list').append("<div>marker clicked: " + marker.text + "</div>");
 
-   $(".reset").click(function(){
-      player.markers.reset([{
-            time: 40,
-            text: "I'm NEW"
-         },
-         {
-            time:20,
-            text: "Brank new"
-         }]);
+      },
+      onTimeUpdateAfterMarkerUpdate: function() {
+        prevTime = player.currentTime();
+      },
    });
-   $(".destroy").click(function(){
-      player.markers.destroy();
-   })
 </script>
 </html>
