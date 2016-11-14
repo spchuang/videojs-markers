@@ -105,6 +105,10 @@ type Marker = {
     }
 
     function createMarkerDiv(marker: Marker): Object {
+      var ratio = marker.time / player.duration();
+      if (ratio < 0 || ratio > 1) {
+        return;
+      }
       var markerDiv = $("<div class='vjs-marker'></div>");
       markerDiv
         .css(setting.markerStyle)
