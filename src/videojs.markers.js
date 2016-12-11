@@ -17,11 +17,6 @@ type Marker = {
 (function($, videojs, undefined) {
   // default setting
   const defaultSetting = {
-    markerStyle: {
-      'width':'7px',
-      'border-radius': '30%',
-      'background-color': 'red',
-    },
     markerTip: {
       display: true,
       text: function(marker) {
@@ -30,6 +25,7 @@ type Marker = {
       time: function(marker) {
         return marker.time;
       },
+      style: {}
     },
     breakOverlay:{
       display: false,
@@ -37,16 +33,11 @@ type Marker = {
       text: function(marker) {
         return "Break overlay: " + marker.overlayText;
       },
-      style: {
-        'width':'100%',
-        'height': '20%',
-        'background-color': 'rgba(0,0,0,0.7)',
-        'color': 'white',
-        'font-size': '17px',
-      },
+      style: {},
     },
     onMarkerClick: function(marker) {},
     onMarkerReached: function(marker, index) {},
+    directInitialize: false,
     markers: [],
   };
 
@@ -107,7 +98,7 @@ type Marker = {
     function createMarkerDiv(marker: Marker): Object {
       var markerDiv = $("<div class='vjs-marker'></div>");
       markerDiv
-        .css(setting.markerStyle)
+        .css(marker.style ? $.extend({}, setting.markerTip.style, marker.style) : setting.markerTip.style)
         .css({
           "margin-left" : -parseFloat(markerDiv.css("width"))/2 + 'px',
           "left" : getPosition(marker) + '%',
@@ -338,11 +329,6 @@ type Marker = {
       player.on("timeupdate", onTimeUpdate);
     }
 
-    // setup the plugin after we loaded video's meta data
-    player.on("loadedmetadata", function() {
-      initialize();
-    });
-
     // exposed plugin API
     player.markers = {
       getMarkers: function(): Array<Marker> {
@@ -404,6 +390,15 @@ type Marker = {
         delete player.markers;
       },
     };
+
+    if (setting.directInitialize) {
+      initialize();
+    } else {
+      // setup the plugin after we loaded video's meta data
+      player.on("loadedmetadata", function() {
+        initialize();
+      });
+    }
   }
 
   videojs.plugin('markers', registerVideoJsMarkersPlugin);
