@@ -91,6 +91,10 @@
       return setting.markerTip.time(marker) / player.duration() * 100;
     }
 
+    function getWidth(marker) {
+      return marker.duration / player.duration() * 100;
+    }
+
     function createMarkerDiv(marker) {
       var markerDiv = videojs.createEl('div', {
         className: 'vjs-marker ' + (marker.class || "")
@@ -102,7 +106,12 @@
         markerDiv.style[key] = setting.markerStyle[key];
       });
       markerDiv.style.left = getPosition(marker) + '%';
-      markerDiv.style.marginLeft = markerDiv.getBoundingClientRect().width / 2 + 'px';
+      if (marker.duration) {
+        markerDiv.style.width = getWidth(marker) + '%';
+        markerDiv.style.marginLeft = '0px';
+      } else {
+        markerDiv.style.marginLeft = markerDiv.getBoundingClientRect().width / 2 + 'px';
+      }
 
       // bind click event to seek to marker time
       markerDiv.addEventListener('click', function (e) {
@@ -133,6 +142,12 @@
 
         if (markerDiv.getAttribute('data-marker-time') !== markerTime) {
           markerDiv.style.left = getPosition(marker) + '%';
+          if (marker.duration) {
+            markerDiv.style.width = getWidth(marker) + '%';
+            markerDiv.style.marginLeft = '0px';
+          } else {
+            markerDiv.style.marginLeft = markerDiv.getBoundingClientRect().width / 2 + 'px';
+          }
           markerDiv.setAttribute('data-marker-time', markerTime);
         }
       });
