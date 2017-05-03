@@ -70,6 +70,12 @@ module.exports = function(grunt) {
             src: '<%= concat.dist.dest %>',
             dest: 'dist/<%= pkg.name %>.min.js'
          }
+      },
+      watch: {
+        scripts: {
+          files: ['src/*.js'],
+          tasks: ['compile'],
+        }
       }
    });
 
