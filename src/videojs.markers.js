@@ -7,6 +7,7 @@
 
 type Marker = {
   time: number,
+  duration: number,
   text?: string,
   class?: string,
   overlayText?: string,
@@ -103,6 +104,10 @@ type Marker = {
       return (setting.markerTip.time(marker) / player.duration()) * 100;
     }
 
+    function getWidth(marker: Marker): number {
+      return (marker.duration / player.duration()) * 100;
+    }
+
     function createMarkerDiv(marker: Marker): Object {
       var markerDiv = videojs.createEl('div', {
         className: `vjs-marker ${marker.class||""}`,
@@ -114,7 +119,12 @@ type Marker = {
         markerDiv.style[key] = setting.markerStyle[key]
       })
       markerDiv.style.left = getPosition(marker) + '%'
-      markerDiv.style.marginLeft = markerDiv.getBoundingClientRect().width/2 + 'px'
+      if (marker.duration) {
+        markerDiv.style.width = getWidth(marker) + '%'
+        markerDiv.style.marginLeft = '0px'
+      } else {
+        markerDiv.style.marginLeft = markerDiv.getBoundingClientRect().width/2 + 'px'
+      }
 
       // bind click event to seek to marker time
       markerDiv.addEventListener('click', function(e) {
@@ -145,6 +155,12 @@ type Marker = {
 
         if (markerDiv.getAttribute('data-marker-time') !== markerTime) {
           markerDiv.style.left = getPosition(marker) + '%'
+          if (marker.duration) {
+            markerDiv.style.width = getWidth(marker) + '%'
+            markerDiv.style.marginLeft = '0px'
+          } else {
+            markerDiv.style.marginLeft = markerDiv.getBoundingClientRect().width/2 + 'px'
+          }
           markerDiv.setAttribute('data-marker-time', markerTime)
         }
       });
