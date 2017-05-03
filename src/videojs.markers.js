@@ -14,7 +14,7 @@ type Marker = {
   key: string,
 };
 
-(function($, videojs, undefined) {
+(function(videojs, undefined) {
   // default setting
   const defaultSetting = {
     markerStyle: {
@@ -68,10 +68,9 @@ type Marker = {
      * register the markers plugin (dependent on jquery)
      */
 
-    let setting = $.extend(true, {}, defaultSetting, options),
+    let setting = videojs.mergeOptions(defaultSetting, options),
         markersMap: {[key:string]: Marker} = {},
         markersList: Array<Marker>  = [], // list of markers sorted by time
-        videoWrapper = $(this.el()),
         currentMarkerIndex  = NULL_INDEX,
         player       = this,
         markerTip    = null,
@@ -89,8 +88,8 @@ type Marker = {
       newMarkers.forEach((marker: Marker) => {
         marker.key = generateUUID();
 
-        videoWrapper.find('.vjs-progress-holder')
-          .append(createMarkerDiv(marker));
+        player.el().querySelector('.vjs-progress-holder')
+          .appendChild(createMarkerDiv(marker));
 
         // store marker in an internal hash map
         markersMap[marker.key] = marker;
@@ -105,23 +104,20 @@ type Marker = {
     }
 
     function createMarkerDiv(marker: Marker): Object {
-      var markerDiv = $("<div class='vjs-marker'></div>");
-      markerDiv
-        .css(setting.markerStyle)
-        .css({
-          "margin-left" : -parseFloat(markerDiv.css("width"))/2 + 'px',
-          "left" : getPosition(marker) + '%',
-        })
-        .attr("data-marker-key", marker.key)
-        .attr("data-marker-time", setting.markerTip.time(marker));
-
-      // add user-defined class to marker
-      if (marker.class) {
-        markerDiv.addClass(marker.class);
-      }
+      var markerDiv = videojs.createEl('div', {
+        className: `vjs-marker ${marker.class||""}`,
+      }, {
+        'data-marker-key': marker.key,
+        'data-marker-time': setting.markerTip.time(marker)
+      })
+      Object.keys(setting.markerStyle).forEach(key => {
+        markerDiv.style[key] = setting.markerStyle[key]
+      })
+      markerDiv.style.left = getPosition(marker) + '%'
+      markerDiv.style.marginLeft = markerDiv.getBoundingClientRect().width/2 + 'px'
 
       // bind click event to seek to marker time
-      markerDiv.on('click', function(e) {
+      markerDiv.addEventListener('click', function(e) {
         var preventDefault = false;
         if (typeof setting.onMarkerClick === "function") {
           // if return false, prevent default behavior
@@ -129,7 +125,7 @@ type Marker = {
         }
 
         if (!preventDefault) {
-          var key = $(this).data('marker-key');
+          var key = this.getAttribute('data-marker-key');
           player.currentTime(setting.markerTip.time(markersMap[key]));
         }
       });
@@ -144,13 +140,12 @@ type Marker = {
     function updateMarkers(): void {
       // update UI for markers whose time changed
       markersList.forEach((marker: Marker) => {
-        var markerDiv = videoWrapper.find(".vjs-marker[data-marker-key='" + marker.key +"']");
+        var markerDiv = player.el().querySelector(".vjs-marker[data-marker-key='" + marker.key +"']");
         var markerTime = setting.markerTip.time(marker);
 
-        if (markerDiv.data('marker-time') !== markerTime) {
-          markerDiv
-          .css({"left": getPosition(marker) + '%'})
-          .attr("data-marker-time", markerTime);
+        if (markerDiv.getAttribute('data-marker-time') !== markerTime) {
+          markerDiv.style.left = getPosition(marker) + '%'
+          markerDiv.setAttribute('data-marker-time', markerTime)
         }
       });
       sortMarkersList();
@@ -160,7 +155,7 @@ type Marker = {
       // reset overlay
       if (!!breakOverlay){
         overlayIndex = NULL_INDEX;
-        breakOverlay.css("visibility", "hidden");
+        breakOverlay.style.visibility = "hidden";
       }
       currentMarkerIndex = NULL_INDEX;
 
@@ -173,7 +168,8 @@ type Marker = {
           deleteIndexList.push(index);
 
           // delete from dom
-          videoWrapper.find(".vjs-marker[data-marker-key='" + marker.key +"']").remove();
+          let el = player.el().querySelector(".vjs-marker[data-marker-key='" + marker.key +"']")
+          el.parentNode.removeChild(el)
         }
       });
 
@@ -189,30 +185,30 @@ type Marker = {
 
     // attach hover event handler
     function registerMarkerTipHandler(markerDiv: Object): void {
-      markerDiv.on('mouseover', () => {
-        var marker = markersMap[$(markerDiv).data('marker-key')];
+      markerDiv.addEventListener('mouseover', () => {
+        var marker = markersMap[markerDiv.getAttribute('data-marker-key')];
 
         if (!!markerTip) {
-          markerTip.find('.vjs-tip-inner').text(setting.markerTip.text(marker));
+          markerTip.querySelector('.vjs-tip-inner').innerText = setting.markerTip.text(marker);
 
           // margin-left needs to minus the padding length to align correctly with the marker
-          markerTip.css({
-            "left" : getPosition(marker) + '%',
-            "margin-left" : -parseFloat(markerTip.width()) / 2 - 5 + 'px',
-            "visibility"  : "visible",
-          });
+          markerTip.style.left = getPosition(marker) + '%'
+          markerTip.style.marginLeft = -parseFloat(markerTip.getBoundingClientRect().width) / 2 - 5 + 'px'
+          markerTip.style.visibility = 'visible'
         }
-
       });
 
-      markerDiv.on('mouseout',() => {
-        !!markerTip && markerTip.css("visibility", "hidden");
+      markerDiv.addEventListener('mouseout',() => {
+        if (!!markerTip) markerTip.style.visibility = "hidden";
       });
     }
 
     function initializeMarkerTip(): void {
-      markerTip = $("<div class='vjs-tip'><div class='vjs-tip-arrow'></div><div class='vjs-tip-inner'></div></div>");
-      videoWrapper.find('.vjs-progress-holder').append(markerTip);
+      markerTip = videojs.createEl('div', {
+        className: 'vjs-tip',
+        innerHTML: "<div class='vjs-tip-arrow'></div><div class='vjs-tip-inner'></div>",
+      })
+      player.el().querySelector('.vjs-progress-holder').appendChild(markerTip);
     }
 
     // show or hide break overlays
@@ -231,21 +227,26 @@ type Marker = {
       ) {
         if (overlayIndex !== currentMarkerIndex) {
           overlayIndex = currentMarkerIndex;
-          breakOverlay && breakOverlay.find('.vjs-break-overlay-text').html(setting.breakOverlay.text(marker));
+          if (breakOverlay) breakOverlay.querySelector('.vjs-break-overlay-text').innerHTML = setting.breakOverlay.text(marker);
         }
 
-        breakOverlay && breakOverlay.css('visibility', "visible");
+        if (breakOverlay) breakOverlay.style.visibility = "visible";
       } else {
         overlayIndex = NULL_INDEX;
-        breakOverlay && breakOverlay.css("visibility", "hidden");
+        if (breakOverlay) breakOverlay.style.visibility = "hidden";
       }
     }
 
     // problem when the next marker is within the overlay display time from the previous marker
     function initializeOverlay(): void {
-      breakOverlay = $("<div class='vjs-break-overlay'><div class='vjs-break-overlay-text'></div></div>")
-      .css(setting.breakOverlay.style);
-      videoWrapper.append(breakOverlay);
+      breakOverlay = videojs.createEl('div', {
+        className: 'vjs-break-overlay',
+        innerHTML: "<div class='vjs-break-overlay-text'></div>"
+      })
+      Object.keys(setting.breakOverlay.style).forEach(key => {
+        breakOverlay.style[key] = setting.breakOverlay.style[key]
+      })
+      player.el().appendChild(breakOverlay)
       overlayIndex = NULL_INDEX;
     }
 
@@ -408,4 +409,4 @@ type Marker = {
 
   videojs.plugin('markers', registerVideoJsMarkersPlugin);
 
-})(jQuery, window.videojs);
+})(window.videojs);
