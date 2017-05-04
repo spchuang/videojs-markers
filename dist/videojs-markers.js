@@ -1,4 +1,4 @@
-/*! videojs-markers - v0.7.0 - 2017-05-02
+/*! videojs-markers - v0.7.0 - 2017-05-04
 * Copyright (c) 2017 ; Licensed  */
 'use strict';
 
@@ -187,7 +187,9 @@
       });
 
       markerDiv.addEventListener('mouseout', function () {
-        if (!!markerTip) markerTip.style.visibility = "hidden";
+        if (!!markerTip) {
+          markerTip.style.visibility = "hidden";
+        }
       });
     }
 
@@ -212,13 +214,19 @@
       if (currentTime >= markerTime && currentTime <= markerTime + setting.breakOverlay.displayTime) {
         if (overlayIndex !== currentMarkerIndex) {
           overlayIndex = currentMarkerIndex;
-          if (breakOverlay) breakOverlay.querySelector('.vjs-break-overlay-text').innerHTML = setting.breakOverlay.text(marker);
+          if (breakOverlay) {
+            breakOverlay.querySelector('.vjs-break-overlay-text').innerHTML = setting.breakOverlay.text(marker);
+          }
         }
 
-        if (breakOverlay) breakOverlay.style.visibility = "visible";
+        if (breakOverlay) {
+          breakOverlay.style.visibility = "visible";
+        }
       } else {
         overlayIndex = NULL_INDEX;
-        if (breakOverlay) breakOverlay.style.visibility = "hidden";
+        if (breakOverlay) {
+          breakOverlay.style.visibility = "hidden";
+        }
       }
     }
 
