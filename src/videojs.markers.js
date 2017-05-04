@@ -199,7 +199,9 @@ type Marker = {
       });
 
       markerDiv.addEventListener('mouseout',() => {
-        if (!!markerTip) markerTip.style.visibility = "hidden";
+        if (!!markerTip) {
+          markerTip.style.visibility = "hidden";
+        }
       });
     }
 
@@ -227,13 +229,19 @@ type Marker = {
       ) {
         if (overlayIndex !== currentMarkerIndex) {
           overlayIndex = currentMarkerIndex;
-          if (breakOverlay) breakOverlay.querySelector('.vjs-break-overlay-text').innerHTML = setting.breakOverlay.text(marker);
+          if (breakOverlay) {
+            breakOverlay.querySelector('.vjs-break-overlay-text').innerHTML = setting.breakOverlay.text(marker);
+          }
         }
 
-        if (breakOverlay) breakOverlay.style.visibility = "visible";
+        if (breakOverlay) {
+          breakOverlay.style.visibility = "visible";
+        }
       } else {
         overlayIndex = NULL_INDEX;
-        if (breakOverlay) breakOverlay.style.visibility = "hidden";
+        if (breakOverlay) {
+          breakOverlay.style.visibility = "hidden";
+        }
       }
     }
 
