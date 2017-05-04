@@ -336,6 +336,7 @@ type Marker = {
       }
       onTimeUpdate();
       player.on("timeupdate", onTimeUpdate);
+      player.off("loadedmetadata");
     }
 
     // setup the plugin after we loaded video's meta data
