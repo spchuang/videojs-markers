@@ -49,16 +49,19 @@ To add breaks in the video, simply add a new time (in seconds) in the list of br
     });
 
 ### Customize marker style:
-The style of the markers could be modified by passing an optional setting "markerStyle" with your preference of css styles.
+The style of the markers could be modified by passing an optional setting "markerTip.style" with your preference of css styles.
+You can also customise each marker style on it's own.
 
     video.markers({
-      markerStyle: {
-         'width':'8px',
-         'background-color': 'red'
+      markerTip: {
+         style: {
+             'width':'8px',
+             'background-color': 'red'
+         }
       },
       markers: [
          {time: 9.5, text: "this"},
-         {time: 16,  text: "is"},
+         {time: 16,  text: "is", style: {'background-color': 'yellow'}},
          {time: 23.6,text: "so"},
          {time: 28,  text: "cool"}
       ]    
