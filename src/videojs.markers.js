@@ -110,20 +110,20 @@ type Marker = {
 
     function createMarkerDiv(marker: Marker): Object {
       var markerDiv = videojs.createEl('div', {
-        className: `vjs-marker ${marker.class||""}`,
+        className: `vjs-marker ${marker.class || ""}`,
       }, {
         'data-marker-key': marker.key,
         'data-marker-time': setting.markerTip.time(marker)
-      })
+      });
       Object.keys(setting.markerStyle).forEach(key => {
-        markerDiv.style[key] = setting.markerStyle[key]
-      })
-      markerDiv.style.left = getPosition(marker) + '%'
+        markerDiv.style[key] = setting.markerStyle[key];
+      });
+      markerDiv.style.left = getPosition(marker) + '%';
       if (marker.duration) {
-        markerDiv.style.width = getWidth(marker) + '%'
-        markerDiv.style.marginLeft = '0px'
+        markerDiv.style.width = getWidth(marker) + '%';
+        markerDiv.style.marginLeft = '0px';
       } else {
-        markerDiv.style.marginLeft = markerDiv.getBoundingClientRect().width/2 + 'px'
+        markerDiv.style.marginLeft = markerDiv.getBoundingClientRect().width/2 + 'px';
       }
 
       // bind click event to seek to marker time
@@ -154,14 +154,14 @@ type Marker = {
         var markerTime = setting.markerTip.time(marker);
 
         if (markerDiv.getAttribute('data-marker-time') !== markerTime) {
-          markerDiv.style.left = getPosition(marker) + '%'
+          markerDiv.style.left = getPosition(marker) + '%';
           if (marker.duration) {
-            markerDiv.style.width = getWidth(marker) + '%'
-            markerDiv.style.marginLeft = '0px'
+            markerDiv.style.width = getWidth(marker) + '%';
+            markerDiv.style.marginLeft = '0px';
           } else {
-            markerDiv.style.marginLeft = markerDiv.getBoundingClientRect().width/2 + 'px'
+            markerDiv.style.marginLeft = markerDiv.getBoundingClientRect().width/2 + 'px';
           }
-          markerDiv.setAttribute('data-marker-time', markerTime)
+          markerDiv.setAttribute('data-marker-time', markerTime);
         }
       });
       sortMarkersList();
@@ -184,8 +184,8 @@ type Marker = {
           deleteIndexList.push(index);
 
           // delete from dom
-          let el = player.el().querySelector(".vjs-marker[data-marker-key='" + marker.key +"']")
-          el.parentNode.removeChild(el)
+          let el = player.el().querySelector(".vjs-marker[data-marker-key='" + marker.key +"']");
+          el.parentNode.removeChild(el);
         }
       });
 
@@ -193,7 +193,7 @@ type Marker = {
       deleteIndexList.reverse();
       deleteIndexList.forEach((deleteIndex: number) => {
         markersList.splice(deleteIndex, 1);
-      })
+      });
 
       // sort again
       sortMarkersList();
@@ -208,14 +208,16 @@ type Marker = {
           markerTip.querySelector('.vjs-tip-inner').innerText = setting.markerTip.text(marker);
 
           // margin-left needs to minus the padding length to align correctly with the marker
-          markerTip.style.left = getPosition(marker) + '%'
-          markerTip.style.marginLeft = -parseFloat(markerTip.getBoundingClientRect().width) / 2 - 5 + 'px'
-          markerTip.style.visibility = 'visible'
+          markerTip.style.left = getPosition(marker) + '%';
+          markerTip.style.marginLeft = -parseFloat(markerTip.getBoundingClientRect().width) / 2 - 5 + 'px';
+          markerTip.style.visibility = 'visible';
         }
       });
 
       markerDiv.addEventListener('mouseout',() => {
-        if (!!markerTip) markerTip.style.visibility = "hidden";
+        if (!!markerTip) {
+          markerTip.style.visibility = "hidden";
+        }
       });
     }
 
@@ -223,7 +225,7 @@ type Marker = {
       markerTip = videojs.createEl('div', {
         className: 'vjs-tip',
         innerHTML: "<div class='vjs-tip-arrow'></div><div class='vjs-tip-inner'></div>",
-      })
+      });
       player.el().querySelector('.vjs-progress-holder').appendChild(markerTip);
     }
 
@@ -243,13 +245,19 @@ type Marker = {
       ) {
         if (overlayIndex !== currentMarkerIndex) {
           overlayIndex = currentMarkerIndex;
-          if (breakOverlay) breakOverlay.querySelector('.vjs-break-overlay-text').innerHTML = setting.breakOverlay.text(marker);
+          if (breakOverlay) {
+            breakOverlay.querySelector('.vjs-break-overlay-text').innerHTML = setting.breakOverlay.text(marker);
+          }
         }
 
-        if (breakOverlay) breakOverlay.style.visibility = "visible";
+        if (breakOverlay) {
+          breakOverlay.style.visibility = "visible";
+        }
       } else {
         overlayIndex = NULL_INDEX;
-        if (breakOverlay) breakOverlay.style.visibility = "hidden";
+        if (breakOverlay) {
+          breakOverlay.style.visibility = "hidden";
+        }
       }
     }
 
@@ -258,11 +266,11 @@ type Marker = {
       breakOverlay = videojs.createEl('div', {
         className: 'vjs-break-overlay',
         innerHTML: "<div class='vjs-break-overlay-text'></div>"
-      })
+      });
       Object.keys(setting.breakOverlay.style).forEach(key => {
         breakOverlay.style[key] = setting.breakOverlay.style[key]
-      })
-      player.el().appendChild(breakOverlay)
+      });
+      player.el().appendChild(breakOverlay);
       overlayIndex = NULL_INDEX;
     }
 
@@ -353,6 +361,7 @@ type Marker = {
       }
       onTimeUpdate();
       player.on("timeupdate", onTimeUpdate);
+      player.off("loadedmetadata");
     }
 
     // setup the plugin after we loaded video's meta data
