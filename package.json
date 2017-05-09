@@ -3,7 +3,7 @@
   "description": "video marker breaks plugin for video.js",
   "version": "0.7.0",
   "peerDependencies": {
-    "video-js": "4.0"
+    "video.js": ">=4"
   },
   "scripts": {
     "flow": "flow; test $? -eq 0 -o $? -eq 2"
