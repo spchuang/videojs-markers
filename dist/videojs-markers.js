@@ -1,8 +1,28 @@
-/*! videojs-markers - v0.7.0 - 2017-05-04
-* Copyright (c) 2017 ; Licensed  */
-'use strict';
+(function (global, factory) {
+  if (typeof define === "function" && define.amd) {
+    define(['video.js'], factory);
+  } else if (typeof exports !== "undefined") {
+    factory(require('video.js'));
+  } else {
+    var mod = {
+      exports: {}
+    };
+    factory(global.videojs);
+    global.videojsMarkers = mod.exports;
+  }
+})(this, function (_video) {
+  /*! videojs-markers - v0.7.0 - 2017-05-16
+  * Copyright (c) 2017 ; Licensed  */
+  'use strict';
 
-(function (videojs, undefined) {
+  var _video2 = _interopRequireDefault(_video);
+
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
+
   // default setting
   var defaultSetting = {
     markerStyle: {
@@ -56,7 +76,7 @@
      * register the markers plugin (dependent on jquery)
      */
 
-    var setting = videojs.mergeOptions(defaultSetting, options),
+    var setting = _video2.default.mergeOptions(defaultSetting, options),
         markersMap = {},
         markersList = [],
         // list of markers sorted by time
@@ -92,7 +112,7 @@
     }
 
     function createMarkerDiv(marker) {
-      var markerDiv = videojs.createEl('div', {
+      var markerDiv = _video2.default.createEl('div', {
         className: 'vjs-marker ' + (marker.class || "")
       }, {
         'data-marker-key': marker.key,
@@ -194,7 +214,7 @@
     }
 
     function initializeMarkerTip() {
-      markerTip = videojs.createEl('div', {
+      markerTip = _video2.default.createEl('div', {
         className: 'vjs-tip',
         innerHTML: "<div class='vjs-tip-arrow'></div><div class='vjs-tip-inner'></div>"
       });
@@ -232,7 +252,7 @@
 
     // problem when the next marker is within the overlay display time from the previous marker
     function initializeOverlay() {
-      breakOverlay = videojs.createEl('div', {
+      breakOverlay = _video2.default.createEl('div', {
         className: 'vjs-break-overlay',
         innerHTML: "<div class='vjs-break-overlay-text'></div>"
       });
@@ -321,6 +341,7 @@
       }
       onTimeUpdate();
       player.on("timeupdate", onTimeUpdate);
+      player.off("loadedmetadata");
     }
 
     // setup the plugin after we loaded video's meta data
@@ -391,6 +412,6 @@
     };
   }
 
-  videojs.plugin('markers', registerVideoJsMarkersPlugin);
-})(window.videojs);
+  _video2.default.plugin('markers', registerVideoJsMarkersPlugin);
+});
 //# sourceMappingURL=videojs-markers.js.map

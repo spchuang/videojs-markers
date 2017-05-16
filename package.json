@@ -2,14 +2,16 @@
   "name": "videojs-markers",
   "description": "video marker breaks plugin for video.js",
   "version": "0.7.0",
+  "main": "dist/videojs-markers.js",
   "peerDependencies": {
-    "video-js": "4.0"
+    "video.js": ">=4"
   },
   "scripts": {
     "flow": "flow; test $? -eq 0 -o $? -eq 2"
   },
   "devDependencies": {
     "babel-plugin-syntax-trailing-function-commas": "6.13.0",
+    "babel-plugin-transform-es2015-modules-umd": "^6.24.1",
     "babel-plugin-transform-flow-strip-types": "6.14.0",
     "babel-preset-es2015": "6.16.0",
     "flow": "0.2.3",
