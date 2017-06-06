@@ -24,11 +24,10 @@ JSBin Demo can be found [here](http://jsbin.com/vifilen/1/edit)
 
 
 ## Quick Start
-Add the 'videojs.markers.js' plugin and stylesheet after including videojs script and jQuery library
+Add the 'videojs.markers.js' plugin and stylesheet after including videojs script
 
     <link href="http://vjs.zencdn.net/4.2/video-js.css" rel="stylesheet">
     <link href="videojs.markers.css" rel="stylesheet">
-    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
     <script src="http://vjs.zencdn.net/4.2/video.js"></script>
     <script src='../src/videojs.markers.js'></script>
 
@@ -65,6 +64,8 @@ The style of the markers could be modified by passing an optional setting "marke
     });
 
 ## History
+- 0.9.0
+   - remove jquery dependency
 - 0.7.0
    - support videojs 5
 - 0.6.0
