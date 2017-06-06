@@ -53,6 +53,12 @@ module.exports = function(grunt) {
             sourceMap: true,
             presets: ['es2015'],
             "plugins": [
+              ["transform-es2015-modules-umd", {
+                "globals": {
+                  "video.js": "videojs"
+                },
+                "exactGlobals": true
+              }],
               "transform-flow-strip-types",
               "syntax-trailing-function-commas"
             ]
