@@ -65,10 +65,55 @@ function generateUUID(): string {
 const NULL_INDEX = -1;
 
 function registerVideoJsMarkersPlugin(options) {
+  // copied from video.js/src/js/utils/merge-options.js since
+  // videojs 4 doens't support it by defualt.
+  if (!videojs.mergeOptions) {
+    function isPlain(value) {
+      return !!value && typeof value === 'object' &&
+        toString.call(value) === '[object Object]' &&
+        value.constructor === Object;
+    }
+    function mergeOptions(source1: Object, source2: Object) {
+
+      const result = {};
+      const sources = [source1, source2];
+      sources.forEach(source => {
+        if (!source) {
+          return;
+        }
+        Object.keys(source).forEach(key => {
+          let value = source[key];
+          if (!isPlain(value)) {
+            result[key] = value;
+            return;
+          }
+          if (!isPlain(result[key])) {
+            result[key] = {};
+          }
+          result[key] = mergeOptions(result[key], value);
+        })
+      });
+      return result;
+    }
+    videojs.mergeOptions = mergeOptions;
+  }
+
+  if (!videojs.createEl) {
+    videojs.createEl = function(tagName: string, props: Object, attrs?: Object): void {
+      const el = videojs.Player.prototype.createEl(tagName, props);
+      if (!!attrs) {
+        Object.keys(attrs).forEach(key => {
+          el.setAttribute(key, attrs[key]);
+        });
+      }
+      return el;
+    }
+  }
+  
+
   /**
    * register the markers plugin (dependent on jquery)
    */
-
   let setting = videojs.mergeOptions(defaultSetting, options),
       markersMap: {[key:string]: Marker} = {},
       markersList: Array<Marker>  = [], // list of markers sorted by time
@@ -111,6 +156,7 @@ function registerVideoJsMarkersPlugin(options) {
       'data-marker-key': marker.key,
       'data-marker-time': setting.markerTip.time(marker)
     });
+
     Object.keys(setting.markerStyle).forEach(key => {
       markerDiv.style[key] = setting.markerStyle[key];
     });
@@ -188,13 +234,12 @@ function registerVideoJsMarkersPlugin(options) {
   function registerMarkerTipHandler(markerDiv: Object): void {
     markerDiv.addEventListener('mouseover', () => {
       var marker = markersMap[markerDiv.getAttribute('data-marker-key')];
-
       if (!!markerTip) {
         markerTip.querySelector('.vjs-tip-inner').innerText = setting.markerTip.text(marker);
-
         // margin-left needs to minus the padding length to align correctly with the marker
         markerTip.style.left = getPosition(marker) + '%';
-        markerTip.style.marginLeft = -parseFloat(markerTip.getBoundingClientRect().width) / 2 - 5 + 'px';
+        markerTip.style.marginLeft = 
+          -parseFloat(markerTip.getBoundingClientRect().width / 2) + parseFloat(markerDiv.getBoundingClientRect().width / 4) + 'px';
         markerTip.style.visibility = 'visible';
       }
     });
@@ -253,7 +298,9 @@ function registerVideoJsMarkersPlugin(options) {
       innerHTML: "<div class='vjs-break-overlay-text'></div>"
     });
     Object.keys(setting.breakOverlay.style).forEach(key => {
-      breakOverlay.style[key] = setting.breakOverlay.style[key]
+      if (breakOverlay) {
+        breakOverlay.style[key] = setting.breakOverlay.style[key];
+      }
     });
     player.el().appendChild(breakOverlay);
     overlayIndex = NULL_INDEX;

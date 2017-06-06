@@ -11,7 +11,7 @@
     global.videojsMarkers = mod.exports;
   }
 })(this, function (_video) {
-  /*! videojs-markers - v0.7.0 - 2017-05-16
+  /*! videojs-markers - v0.7.0 - 2017-06-06
   * Copyright (c) 2017 ; Licensed  */
   'use strict';
 
@@ -22,6 +22,12 @@
       default: obj
     };
   }
+
+  var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+  };
 
   // default setting
   var defaultSetting = {
@@ -72,10 +78,54 @@
   var NULL_INDEX = -1;
 
   function registerVideoJsMarkersPlugin(options) {
+    // copied from video.js/src/js/utils/merge-options.js since
+    // videojs 4 doens't support it by defualt.
+    if (!_video2.default.mergeOptions) {
+      var isPlain = function isPlain(value) {
+        return !!value && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && toString.call(value) === '[object Object]' && value.constructor === Object;
+      };
+
+      var mergeOptions = function mergeOptions(source1, source2) {
+
+        var result = {};
+        var sources = [source1, source2];
+        sources.forEach(function (source) {
+          if (!source) {
+            return;
+          }
+          Object.keys(source).forEach(function (key) {
+            var value = source[key];
+            if (!isPlain(value)) {
+              result[key] = value;
+              return;
+            }
+            if (!isPlain(result[key])) {
+              result[key] = {};
+            }
+            result[key] = mergeOptions(result[key], value);
+          });
+        });
+        return result;
+      };
+
+      _video2.default.mergeOptions = mergeOptions;
+    }
+
+    if (!_video2.default.createEl) {
+      _video2.default.createEl = function (tagName, props, attrs) {
+        var el = _video2.default.Player.prototype.createEl(tagName, props);
+        if (!!attrs) {
+          Object.keys(attrs).forEach(function (key) {
+            el.setAttribute(key, attrs[key]);
+          });
+        }
+        return el;
+      };
+    }
+
     /**
      * register the markers plugin (dependent on jquery)
      */
-
     var setting = _video2.default.mergeOptions(defaultSetting, options),
         markersMap = {},
         markersList = [],
@@ -118,6 +168,7 @@
         'data-marker-key': marker.key,
         'data-marker-time': setting.markerTip.time(marker)
       });
+
       Object.keys(setting.markerStyle).forEach(function (key) {
         markerDiv.style[key] = setting.markerStyle[key];
       });
@@ -195,13 +246,11 @@
     function registerMarkerTipHandler(markerDiv) {
       markerDiv.addEventListener('mouseover', function () {
         var marker = markersMap[markerDiv.getAttribute('data-marker-key')];
-
         if (!!markerTip) {
           markerTip.querySelector('.vjs-tip-inner').innerText = setting.markerTip.text(marker);
-
           // margin-left needs to minus the padding length to align correctly with the marker
           markerTip.style.left = getPosition(marker) + '%';
-          markerTip.style.marginLeft = -parseFloat(markerTip.getBoundingClientRect().width) / 2 - 5 + 'px';
+          markerTip.style.marginLeft = -parseFloat(markerTip.getBoundingClientRect().width / 2) + parseFloat(markerDiv.getBoundingClientRect().width / 4) + 'px';
           markerTip.style.visibility = 'visible';
         }
       });
@@ -257,7 +306,9 @@
         innerHTML: "<div class='vjs-break-overlay-text'></div>"
       });
       Object.keys(setting.breakOverlay.style).forEach(function (key) {
-        breakOverlay.style[key] = setting.breakOverlay.style[key];
+        if (breakOverlay) {
+          breakOverlay.style[key] = setting.breakOverlay.style[key];
+        }
       });
       player.el().appendChild(breakOverlay);
       overlayIndex = NULL_INDEX;
