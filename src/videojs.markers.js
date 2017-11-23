@@ -216,7 +216,7 @@ function registerVideoJsMarkersPlugin(options) {
 
         // delete from dom
         let el = player.el().querySelector(".vjs-marker[data-marker-key='" + marker.key +"']");
-        el.parentNode.removeChild(el);
+        el && el.parentNode.removeChild(el);
       }
     });
 
