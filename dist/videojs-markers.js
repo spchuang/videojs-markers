@@ -11,7 +11,7 @@
     global.videojsMarkers = mod.exports;
   }
 })(this, function (_video) {
-  /*! videojs-markers - v0.9.0 - 2017-08-05
+  /*! videojs-markers - v0.9.0 - 2017-11-23
   * Copyright (c) 2017 ; Licensed  */
   'use strict';
 
@@ -228,7 +228,7 @@
 
           // delete from dom
           var el = player.el().querySelector(".vjs-marker[data-marker-key='" + marker.key + "']");
-          el.parentNode.removeChild(el);
+          el && el.parentNode.removeChild(el);
         }
       });
 
