@@ -62,6 +62,33 @@ function generateUUID(): string {
   return uuid;
 };
 
+/**
+ * Returns the size of an element and its position
+ * a default Object with 0 on each of its properties
+ * its return in case there's an error
+ * @param  {Element} element  el to get the size and position
+ * @return {DOMRect|Object}   size and position of an element
+ */
+function getElementBounding(element) {
+  var elementBounding;
+  const defaultBoundingRect = {
+    top: 0,
+    bottom: 0,
+    left: 0,
+    width: 0,
+    height: 0,
+    right: 0
+  };
+
+  try {
+    elementBounding = element.getBoundingClientRect();
+  } catch (e) {
+    elementBounding = defaultBoundingRect;
+  }
+
+  return elementBounding;
+}
+
 const NULL_INDEX = -1;
 
 function registerVideoJsMarkersPlugin(options) {
@@ -161,7 +188,8 @@ function registerVideoJsMarkersPlugin(options) {
       markerDiv.style[key] = setting.markerStyle[key];
     });
     markerDiv.style.left = getPosition(marker) + '%';
-    markerDiv.style.marginLeft = markerDiv.getBoundingClientRect().width/2 + 'px';
+    var markerDivBounding = getElementBounding(markerDiv);
+    markerDiv.style.marginLeft = markerDivBounding.width / 2 + 'px';
 
     // bind click event to seek to marker time
     markerDiv.addEventListener('click', function(e) {
@@ -238,8 +266,10 @@ function registerVideoJsMarkersPlugin(options) {
         markerTip.querySelector('.vjs-tip-inner').innerText = setting.markerTip.text(marker);
         // margin-left needs to minus the padding length to align correctly with the marker
         markerTip.style.left = getPosition(marker) + '%';
+        var markerTipBounding = getElementBounding(markerTip);
+        var markerDivBounding = getElementBounding(markerDiv);
         markerTip.style.marginLeft = 
-          -parseFloat(markerTip.getBoundingClientRect().width / 2) + parseFloat(markerDiv.getBoundingClientRect().width / 4) + 'px';
+          -parseFloat(markerTipBounding.width / 2) + parseFloat(markerDivBounding.width / 4) + 'px';
         markerTip.style.visibility = 'visible';
       }
     });
