@@ -125,8 +125,8 @@ function registerVideoJsMarkersPlugin(options) {
     videojs.mergeOptions = mergeOptions;
   }
 
-  if (!videojs.dom.createEl) {
-    videojs.dom.createEl = function(tagName: string, props: Object, attrs?: Object): void {
+  if (!videojs.createEl) {
+    videojs.createEl = function(tagName: string, props: Object, attrs?: Object): void {
       const el = videojs.Player.prototype.dom.createEl(tagName, props);
       if (!!attrs) {
         Object.keys(attrs).forEach(key => {
@@ -177,7 +177,7 @@ function registerVideoJsMarkersPlugin(options) {
   }
 
   function createMarkerDiv(marker: Marker): Object {
-    var markerDiv = videojs.dom.createEl('div', {
+    var markerDiv = videojs.createEl('div', {
       className: `vjs-marker ${marker.class || ""}`,
     }, {
       'data-marker-key': marker.key,
@@ -282,7 +282,7 @@ function registerVideoJsMarkersPlugin(options) {
   }
 
   function initializeMarkerTip(): void {
-    markerTip = videojs.dom.createEl('div', {
+    markerTip = videojs.createEl('div', {
       className: 'vjs-tip',
       innerHTML: "<div class='vjs-tip-arrow'></div><div class='vjs-tip-inner'></div>",
     });
@@ -323,7 +323,7 @@ function registerVideoJsMarkersPlugin(options) {
 
   // problem when the next marker is within the overlay display time from the previous marker
   function initializeOverlay(): void {
-    breakOverlay = videojs.dom.createEl('div', {
+    breakOverlay = videojs.createEl('div', {
       className: 'vjs-break-overlay',
       innerHTML: "<div class='vjs-break-overlay-text'></div>"
     });
@@ -494,4 +494,4 @@ function registerVideoJsMarkersPlugin(options) {
   };
 }
 
-videojs.registerPlugin('markers', registerVideoJsMarkersPlugin);
+videojs.plugin('markers', registerVideoJsMarkersPlugin);

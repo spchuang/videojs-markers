@@ -11,7 +11,7 @@
     global.videojsMarkers = mod.exports;
   }
 })(this, function (_video) {
-  /*! videojs-markers - v0.9.0 - 2017-12-09
+  /*! videojs-markers - v0.9.0 - 2017-12-13
   * Copyright (c) 2017 ; Licensed  */
   'use strict';
 
@@ -138,8 +138,8 @@
       _video2.default.mergeOptions = mergeOptions;
     }
 
-    if (!_video2.default.dom.createEl) {
-      _video2.default.dom.createEl = function (tagName, props, attrs) {
+    if (!_video2.default.createEl) {
+      _video2.default.createEl = function (tagName, props, attrs) {
         var el = _video2.default.Player.prototype.dom.createEl(tagName, props);
         if (!!attrs) {
           Object.keys(attrs).forEach(function (key) {
@@ -189,7 +189,7 @@
     }
 
     function createMarkerDiv(marker) {
-      var markerDiv = _video2.default.dom.createEl('div', {
+      var markerDiv = _video2.default.createEl('div', {
         className: 'vjs-marker ' + (marker.class || "")
       }, {
         'data-marker-key': marker.key,
@@ -293,7 +293,7 @@
     }
 
     function initializeMarkerTip() {
-      markerTip = _video2.default.dom.createEl('div', {
+      markerTip = _video2.default.createEl('div', {
         className: 'vjs-tip',
         innerHTML: "<div class='vjs-tip-arrow'></div><div class='vjs-tip-inner'></div>"
       });
@@ -331,7 +331,7 @@
 
     // problem when the next marker is within the overlay display time from the previous marker
     function initializeOverlay() {
-      breakOverlay = _video2.default.dom.createEl('div', {
+      breakOverlay = _video2.default.createEl('div', {
         className: 'vjs-break-overlay',
         innerHTML: "<div class='vjs-break-overlay-text'></div>"
       });
@@ -493,6 +493,6 @@
     };
   }
 
-  _video2.default.registerPlugin('markers', registerVideoJsMarkersPlugin);
+  _video2.default.plugin('markers', registerVideoJsMarkersPlugin);
 });
 //# sourceMappingURL=videojs-markers.js.map
