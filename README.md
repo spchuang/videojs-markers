@@ -77,6 +77,9 @@ The style of the markers could be modified by passing an optional setting "marke
 
 
 ## History
+- 1.0.0
+   - add force flag in updateTime
+   - small bug fixes including UI bug (https://github.com/spchuang/videojs-markers/pull/79)
 - 0.9.0
    - remove jquery dependency
 - 0.7.0
