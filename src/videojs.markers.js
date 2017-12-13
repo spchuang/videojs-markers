@@ -212,13 +212,13 @@ function registerVideoJsMarkersPlugin(options) {
     return markerDiv;
   }
 
-  function updateMarkers(): void {
+  function updateMarkers(force: boolean): void {
     // update UI for markers whose time changed
     markersList.forEach((marker: Marker) => {
       var markerDiv = player.el().querySelector(".vjs-marker[data-marker-key='" + marker.key +"']");
       var markerTime = setting.markerTip.time(marker);
 
-      if (markerDiv.getAttribute('data-marker-time') !== markerTime) {
+      if (force || markerDiv.getAttribute('data-marker-time') !== markerTime) {
         markerDiv.style.left = getPosition(marker) + '%';
         markerDiv.setAttribute('data-marker-time', markerTime);
       }
@@ -474,9 +474,10 @@ function registerVideoJsMarkersPlugin(options) {
       }
       removeMarkers(indexArray);
     },
-    updateTime: function(): void {
+    // force - force all markers to be updated, regardless of if they have changed or not.
+    updateTime: function(force: boolean): void {
       // notify the plugin to update the UI for changes in marker times
-      updateMarkers();
+      updateMarkers(force);
     },
     reset: function(newMarkers: Array<Marker>): void {
       // remove all the existing markers and add new ones

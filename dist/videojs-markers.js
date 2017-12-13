@@ -224,13 +224,13 @@
       return markerDiv;
     }
 
-    function updateMarkers() {
+    function updateMarkers(force) {
       // update UI for markers whose time changed
       markersList.forEach(function (marker) {
         var markerDiv = player.el().querySelector(".vjs-marker[data-marker-key='" + marker.key + "']");
         var markerTime = setting.markerTip.time(marker);
 
-        if (markerDiv.getAttribute('data-marker-time') !== markerTime) {
+        if (force || markerDiv.getAttribute('data-marker-time') !== markerTime) {
           markerDiv.style.left = getPosition(marker) + '%';
           markerDiv.setAttribute('data-marker-time', markerTime);
         }
@@ -473,9 +473,10 @@
         }
         removeMarkers(indexArray);
       },
-      updateTime: function updateTime() {
+      // force - force all markers to be updated, regardless of if they have changed or not.
+      updateTime: function updateTime(force) {
         // notify the plugin to update the UI for changes in marker times
-        updateMarkers();
+        updateMarkers(force);
       },
       reset: function reset(newMarkers) {
         // remove all the existing markers and add new ones
