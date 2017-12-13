@@ -195,6 +195,12 @@
         markerDiv.style[key] = setting.markerStyle[key];
       });
 
+      // hide out-of-bound markers
+      var ratio = marker.time / player.duration();
+      if (ratio < 0 || ratio > 1) {
+        markerDiv.style.display = 'none';
+      }
+
       // set position
       markerDiv.style.left = getPosition(marker) + '%';
       if (marker.duration) {
@@ -207,10 +213,6 @@
     }
 
     function createMarkerDiv(marker) {
-      var ratio = marker.time / player.duration();
-      if (ratio < 0 || ratio > 1) {
-        return null;
-      }
 
       var markerDiv = _video2.default.createEl('div', {}, {
         'data-marker-key': marker.key,
@@ -431,7 +433,7 @@
 
       // remove existing markers if already initialized
       player.markers.removeAll();
-      addMarkers(options.markers);
+      addMarkers(setting.markers);
 
       if (setting.breakOverlay.display) {
         initializeOverlay();

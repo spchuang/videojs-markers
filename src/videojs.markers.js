@@ -184,6 +184,12 @@ function registerVideoJsMarkersPlugin(options) {
       markerDiv.style[key] = setting.markerStyle[key];
     });
 
+    // hide out-of-bound markers
+    const ratio = marker.time / player.duration();
+    if (ratio < 0 || ratio > 1) {
+      markerDiv.style.display = 'none';
+    }
+
     // set position
     markerDiv.style.left = getPosition(marker) + '%';
     if (marker.duration) {
@@ -195,11 +201,7 @@ function registerVideoJsMarkersPlugin(options) {
     }    
   }
 
-  function createMarkerDiv(marker: Marker): ?Object {
-    var ratio = marker.time / player.duration();
-    if (ratio < 0 || ratio > 1) {
-      return null;
-    }
+  function createMarkerDiv(marker: Marker): Object {
 
     var markerDiv = videojs.createEl('div', {}, {
       'data-marker-key': marker.key,
@@ -433,7 +435,7 @@ function registerVideoJsMarkersPlugin(options) {
 
     // remove existing markers if already initialized
     player.markers.removeAll();
-    addMarkers(options.markers);
+    addMarkers(setting.markers);
 
     if (setting.breakOverlay.display) {
       initializeOverlay();
