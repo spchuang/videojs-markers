@@ -178,12 +178,14 @@ function registerVideoJsMarkersPlugin(options) {
   }
 
   function setMarkderDivStyle(marker: Marker, markerDiv: Object): void {
+    markerDiv.className = `vjs-marker ${marker.class || ""}`;
+
     Object.keys(setting.markerStyle).forEach(key => {
       markerDiv.style[key] = setting.markerStyle[key];
     });
 
+    // set position
     markerDiv.style.left = getPosition(marker) + '%';
-
     if (marker.duration) {
       markerDiv.style.width = (marker.duration / player.duration()) * 100 + '%';
       markerDiv.style.marginLeft = '0px';
@@ -199,9 +201,7 @@ function registerVideoJsMarkersPlugin(options) {
       return null;
     }
 
-    var markerDiv = videojs.createEl('div', {
-      className: `vjs-marker ${marker.class || ""}`,
-    }, {
+    var markerDiv = videojs.createEl('div', {}, {
       'data-marker-key': marker.key,
       'data-marker-time': setting.markerTip.time(marker)
     });
