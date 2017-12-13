@@ -9,6 +9,7 @@ import videojs from 'video.js';
 
 type Marker = {
   time: number,
+  duration: number,
   text?: string,
   class?: string,
   overlayText?: string,
@@ -127,7 +128,7 @@ function registerVideoJsMarkersPlugin(options) {
 
   if (!videojs.createEl) {
     videojs.createEl = function(tagName: string, props: Object, attrs?: Object): void {
-      const el = videojs.Player.prototype.dom.createEl(tagName, props);
+      const el = videojs.Player.prototype.createEl(tagName, props);
       if (!!attrs) {
         Object.keys(attrs).forEach(key => {
           el.setAttribute(key, attrs[key]);
@@ -176,7 +177,28 @@ function registerVideoJsMarkersPlugin(options) {
     return (setting.markerTip.time(marker) / player.duration()) * 100;
   }
 
-  function createMarkerDiv(marker: Marker): Object {
+  function setMarkderDivStyle(marker: Marker, markerDiv: Object): void {
+    Object.keys(setting.markerStyle).forEach(key => {
+      markerDiv.style[key] = setting.markerStyle[key];
+    });
+
+    markerDiv.style.left = getPosition(marker) + '%';
+
+    if (marker.duration) {
+      markerDiv.style.width = (marker.duration / player.duration()) * 100 + '%';
+      markerDiv.style.marginLeft = '0px';
+    } else {
+      const markerDivBounding = getElementBounding(markerDiv);
+      markerDiv.style.marginLeft = markerDivBounding.width / 2 + 'px';
+    }    
+  }
+
+  function createMarkerDiv(marker: Marker): ?Object {
+    var ratio = marker.time / player.duration();
+    if (ratio < 0 || ratio > 1) {
+      return null;
+    }
+
     var markerDiv = videojs.createEl('div', {
       className: `vjs-marker ${marker.class || ""}`,
     }, {
@@ -184,12 +206,7 @@ function registerVideoJsMarkersPlugin(options) {
       'data-marker-time': setting.markerTip.time(marker)
     });
 
-    Object.keys(setting.markerStyle).forEach(key => {
-      markerDiv.style[key] = setting.markerStyle[key];
-    });
-    markerDiv.style.left = getPosition(marker) + '%';
-    var markerDivBounding = getElementBounding(markerDiv);
-    markerDiv.style.marginLeft = markerDivBounding.width / 2 + 'px';
+    setMarkderDivStyle(marker, markerDiv);
 
     // bind click event to seek to marker time
     markerDiv.addEventListener('click', function(e) {
@@ -219,7 +236,7 @@ function registerVideoJsMarkersPlugin(options) {
       var markerTime = setting.markerTip.time(marker);
 
       if (force || markerDiv.getAttribute('data-marker-time') !== markerTime) {
-        markerDiv.style.left = getPosition(marker) + '%';
+        setMarkderDivStyle(marker, markerDiv);
         markerDiv.setAttribute('data-marker-time', markerTime);
       }
     });

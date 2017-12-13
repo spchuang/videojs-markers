@@ -140,7 +140,7 @@
 
     if (!_video2.default.createEl) {
       _video2.default.createEl = function (tagName, props, attrs) {
-        var el = _video2.default.Player.prototype.dom.createEl(tagName, props);
+        var el = _video2.default.Player.prototype.createEl(tagName, props);
         if (!!attrs) {
           Object.keys(attrs).forEach(function (key) {
             el.setAttribute(key, attrs[key]);
@@ -188,7 +188,28 @@
       return setting.markerTip.time(marker) / player.duration() * 100;
     }
 
+    function setMarkderDivStyle(marker, markerDiv) {
+      Object.keys(setting.markerStyle).forEach(function (key) {
+        markerDiv.style[key] = setting.markerStyle[key];
+      });
+
+      markerDiv.style.left = getPosition(marker) + '%';
+
+      if (marker.duration) {
+        markerDiv.style.width = marker.duration / player.duration() * 100 + '%';
+        markerDiv.style.marginLeft = '0px';
+      } else {
+        var markerDivBounding = getElementBounding(markerDiv);
+        markerDiv.style.marginLeft = markerDivBounding.width / 2 + 'px';
+      }
+    }
+
     function createMarkerDiv(marker) {
+      var ratio = marker.time / player.duration();
+      if (ratio < 0 || ratio > 1) {
+        return null;
+      }
+
       var markerDiv = _video2.default.createEl('div', {
         className: 'vjs-marker ' + (marker.class || "")
       }, {
@@ -196,12 +217,7 @@
         'data-marker-time': setting.markerTip.time(marker)
       });
 
-      Object.keys(setting.markerStyle).forEach(function (key) {
-        markerDiv.style[key] = setting.markerStyle[key];
-      });
-      markerDiv.style.left = getPosition(marker) + '%';
-      var markerDivBounding = getElementBounding(markerDiv);
-      markerDiv.style.marginLeft = markerDivBounding.width / 2 + 'px';
+      setMarkderDivStyle(marker, markerDiv);
 
       // bind click event to seek to marker time
       markerDiv.addEventListener('click', function (e) {
@@ -231,7 +247,7 @@
         var markerTime = setting.markerTip.time(marker);
 
         if (force || markerDiv.getAttribute('data-marker-time') !== markerTime) {
-          markerDiv.style.left = getPosition(marker) + '%';
+          setMarkderDivStyle(marker, markerDiv);
           markerDiv.setAttribute('data-marker-time', markerTime);
         }
       });
