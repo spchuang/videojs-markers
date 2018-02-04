@@ -11,8 +11,8 @@
     global.videojsMarkers = mod.exports;
   }
 })(this, function (_video) {
-  /*! videojs-markers - v0.9.0 - 2017-12-13
-  * Copyright (c) 2017 ; Licensed  */
+  /*! videojs-markers - v1.0.1 - 2018-02-03
+  * Copyright (c) 2018 ; Licensed  */
   'use strict';
 
   var _video2 = _interopRequireDefault(_video);

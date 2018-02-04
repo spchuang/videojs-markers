@@ -2,7 +2,7 @@
   "name": "videojs-marker",
   "description": "video marker breaks plugin for video.js",
   "homepage": "https://github.com/spchuang/videojs-markers",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": [
     "dist/videojs-markers.js",
     "dist/videojs.markers.css"
