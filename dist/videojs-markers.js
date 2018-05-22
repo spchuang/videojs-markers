@@ -169,7 +169,7 @@
 
         function createMarkerDiv(marker) {
             const markerDiv = _video2.default.createEl("div", {
-                className: `vjs-marker ${options.markerClass || ""}`
+                className: `vjs-marker ${options.markerClass || ""} ${marker.class || ""} `
             }, {
                 "data-marker-key": marker.key,
                 "data-marker-time": setting.markerTip.time(marker)
