@@ -440,11 +440,14 @@
       }
       onTimeUpdate();
       player.on("timeupdate", onTimeUpdate);
-      player.off("loadedmetadata");
+      // player.off("loadedmetadata");
     }
 
     // setup the plugin after we loaded video's meta data
-    player.on("loadedmetadata", function () {
+    // player.on("loadedmetadata", function() {
+    //   initialize();
+    // });
+    player.ready(function () {
       initialize();
     });
 
