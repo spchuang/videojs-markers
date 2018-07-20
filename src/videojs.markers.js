@@ -8,6 +8,7 @@ import videojs from 'video.js';
 
 type Marker = {
   time: number,
+  duration: number,
   text?: string,
   class?: string,
   overlayText?: string,
@@ -60,6 +61,33 @@ function generateUUID(): string {
   });
   return uuid;
 };
+
+/**
+ * Returns the size of an element and its position
+ * a default Object with 0 on each of its properties
+ * its return in case there's an error
+ * @param  {Element} element  el to get the size and position
+ * @return {DOMRect|Object}   size and position of an element
+ */
+function getElementBounding(element) {
+  var elementBounding;
+  const defaultBoundingRect = {
+    top: 0,
+    bottom: 0,
+    left: 0,
+    width: 0,
+    height: 0,
+    right: 0
+  };
+
+  try {
+    elementBounding = element.getBoundingClientRect();
+  } catch (e) {
+    elementBounding = defaultBoundingRect;
+  }
+
+  return elementBounding;
+}
 
 const NULL_INDEX = -1;
 
@@ -148,19 +176,38 @@ function registerVideoJsMarkersPlugin(options) {
     return (setting.markerTip.time(marker) / player.duration()) * 100;
   }
 
-  function createMarkerDiv(marker: Marker): Object {
-    var markerDiv = videojs.dom.createEl('div', {
-      className: `vjs-marker ${marker.class || ""}`,
-    }, {
-      'data-marker-key': marker.key,
-      'data-marker-time': setting.markerTip.time(marker)
-    });
+  function setMarkderDivStyle(marker: Marker, markerDiv: Object): void {
+    markerDiv.className = `vjs-marker ${marker.class || ""}`;
 
     Object.keys(setting.markerStyle).forEach(key => {
       markerDiv.style[key] = setting.markerStyle[key];
     });
+
+    // hide out-of-bound markers
+    const ratio = marker.time / player.duration();
+    if (ratio < 0 || ratio > 1) {
+      markerDiv.style.display = 'none';
+    }
+
+    // set position
     markerDiv.style.left = getPosition(marker) + '%';
-    markerDiv.style.marginLeft = markerDiv.getBoundingClientRect().width/2 + 'px';
+    if (marker.duration) {
+      markerDiv.style.width = (marker.duration / player.duration()) * 100 + '%';
+      markerDiv.style.marginLeft = '0px';
+    } else {
+      const markerDivBounding = getElementBounding(markerDiv);
+      markerDiv.style.marginLeft = markerDivBounding.width / 2 + 'px';
+    }    
+  }
+
+  function createMarkerDiv(marker: Marker): Object {
+
+    var markerDiv = videojs.dom.createEl('div', {}, {
+      'data-marker-key': marker.key,
+      'data-marker-time': setting.markerTip.time(marker)
+    });
+
+    setMarkderDivStyle(marker, markerDiv);
 
     // bind click event to seek to marker time
     markerDiv.addEventListener('click', function(e) {
@@ -183,14 +230,14 @@ function registerVideoJsMarkersPlugin(options) {
     return markerDiv;
   }
 
-  function updateMarkers(): void {
+  function updateMarkers(force: boolean): void {
     // update UI for markers whose time changed
     markersList.forEach((marker: Marker) => {
       var markerDiv = player.el().querySelector(".vjs-marker[data-marker-key='" + marker.key +"']");
       var markerTime = setting.markerTip.time(marker);
 
-      if (markerDiv.getAttribute('data-marker-time') !== markerTime) {
-        markerDiv.style.left = getPosition(marker) + '%';
+      if (force || markerDiv.getAttribute('data-marker-time') !== markerTime) {
+        setMarkderDivStyle(marker, markerDiv);
         markerDiv.setAttribute('data-marker-time', markerTime);
       }
     });
@@ -215,7 +262,7 @@ function registerVideoJsMarkersPlugin(options) {
 
         // delete from dom
         let el = player.el().querySelector(".vjs-marker[data-marker-key='" + marker.key +"']");
-        el.parentNode.removeChild(el);
+        el && el.parentNode.removeChild(el);
       }
     });
 
@@ -237,8 +284,10 @@ function registerVideoJsMarkersPlugin(options) {
         markerTip.querySelector('.vjs-tip-inner').innerText = setting.markerTip.text(marker);
         // margin-left needs to minus the padding length to align correctly with the marker
         markerTip.style.left = getPosition(marker) + '%';
+        var markerTipBounding = getElementBounding(markerTip);
+        var markerDivBounding = getElementBounding(markerDiv);
         markerTip.style.marginLeft = 
-          -parseFloat(markerTip.getBoundingClientRect().width / 2) + parseFloat(markerDiv.getBoundingClientRect().width / 4) + 'px';
+          -parseFloat(markerTipBounding.width / 2) + parseFloat(markerDivBounding.width / 4) + 'px';
         markerTip.style.visibility = 'visible';
       }
     });
@@ -385,7 +434,7 @@ function registerVideoJsMarkersPlugin(options) {
 
     // remove existing markers if already initialized
     player.markers.removeAll();
-    addMarkers(options.markers);
+    addMarkers(setting.markers);
 
     if (setting.breakOverlay.display) {
       initializeOverlay();
@@ -446,9 +495,10 @@ function registerVideoJsMarkersPlugin(options) {
       }
       removeMarkers(indexArray);
     },
-    updateTime: function(): void {
+    // force - force all markers to be updated, regardless of if they have changed or not.
+    updateTime: function(force: boolean): void {
       // notify the plugin to update the UI for changes in marker times
-      updateMarkers();
+      updateMarkers(force);
     },
     reset: function(newMarkers: Array<Marker>): void {
       // remove all the existing markers and add new ones

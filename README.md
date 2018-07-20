@@ -63,7 +63,25 @@ The style of the markers could be modified by passing an optional setting "marke
       ]    
     });
 
+## Development
+```
+> git clone https://github.com/spchuang/videojs-markers
+> cd videojs-markers
+> npm install
+
+// compile js/css assets
+// install grunt: https://gruntjs.com/getting-started
+> npm install -g grunt-cli
+> grunt compile
+```
+
+
 ## History
+- 1.0.1
+   - fix /dist missing issue (issue 81)
+- 1.0.0
+   - add force flag in updateTime
+   - small bug fixes including UI bug (https://github.com/spchuang/videojs-markers/pull/79)
 - 0.9.0
    - remove jquery dependency
 - 0.7.0
