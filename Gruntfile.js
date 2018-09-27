@@ -16,9 +16,7 @@ module.exports = function(grunt) {
       // this way we can use things like name and version (pkg.name)
       pkg: grunt.file.readJSON('package.json'),
       banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
-         '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
-         '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>;' +
-         ' Licensed <%= pkg.license %> */\n',
+         '<%= grunt.template.today("yyyy-mm-dd") %> */\n',
       // all of our configuration will go here
       less: {
          build: {

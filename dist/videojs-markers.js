@@ -11,8 +11,7 @@
     global.videojsMarkers = mod.exports;
   }
 })(this, function (_video) {
-  /*! videojs-markers - v1.0.1 - 2018-04-03
-  * Copyright (c) 2018 ; Licensed  */
+  /*! videojs-markers - v1.0.2 - 2018-09-27 */
   'use strict';
 
   var _video2 = _interopRequireDefault(_video);
@@ -185,7 +184,8 @@
     }
 
     function getPosition(marker) {
-      return setting.markerTip.time(marker) / player.duration() * 100;
+      var result = setting.markerTip.time(marker) / player.duration() * 100;
+      return result > 100 ? 100 : result;
     }
 
     function setMarkderDivStyle(marker, markerDiv) {
