@@ -137,7 +137,6 @@ function registerVideoJsMarkersPlugin(options) {
       return el;
     }
   }
-  
 
   /**
    * register the markers plugin (dependent on jquery)
@@ -174,7 +173,8 @@ function registerVideoJsMarkersPlugin(options) {
   }
 
   function getPosition(marker: Marker): number {
-    return (setting.markerTip.time(marker) / player.duration()) * 100;
+    const result = (setting.markerTip.time(marker) / player.duration()) * 100;
+    return result > 100 ? 100 : result;
   }
 
   function setMarkderDivStyle(marker: Marker, markerDiv: Object): void {
