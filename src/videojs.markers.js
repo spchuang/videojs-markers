@@ -137,7 +137,7 @@ function registerVideoJsMarkersPlugin(options) {
       return el;
     }
   }
-  
+
 
   /**
    * register the markers plugin (dependent on jquery)
@@ -198,7 +198,7 @@ function registerVideoJsMarkersPlugin(options) {
     } else {
       const markerDivBounding = getElementBounding(markerDiv);
       markerDiv.style.marginLeft = markerDivBounding.width / 2 + 'px';
-    }    
+    }
   }
 
   function createMarkerDiv(marker: Marker): Object {
@@ -282,12 +282,16 @@ function registerVideoJsMarkersPlugin(options) {
     markerDiv.addEventListener('mouseover', () => {
       var marker = markersMap[markerDiv.getAttribute('data-marker-key')];
       if (!!markerTip) {
-        markerTip.querySelector('.vjs-tip-inner').innerText = setting.markerTip.text(marker);
+        if (setting.markerTip.html) {
+          markerTip.querySelector('.vjs-tip-inner').innerHTML = setting.markerTip.html(marker);
+        } else {
+          markerTip.querySelector('.vjs-tip-inner').innerText = setting.markerTip.text(marker);
+        }
         // margin-left needs to minus the padding length to align correctly with the marker
         markerTip.style.left = getPosition(marker) + '%';
         var markerTipBounding = getElementBounding(markerTip);
         var markerDivBounding = getElementBounding(markerDiv);
-        markerTip.style.marginLeft = 
+        markerTip.style.marginLeft =
           -parseFloat(markerTipBounding.width / 2) + parseFloat(markerDivBounding.width / 4) + 'px';
         markerTip.style.visibility = 'visible';
       }
