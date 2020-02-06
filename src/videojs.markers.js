@@ -518,4 +518,4 @@ function registerVideoJsMarkersPlugin(options) {
   };
 }
 
-videojs.registerPlugin('markers', registerVideoJsMarkersPlugin);
+videojs.Plugin('markers', registerVideoJsMarkersPlugin);
