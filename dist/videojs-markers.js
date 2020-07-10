@@ -11,8 +11,8 @@
     global.videojsMarkers = mod.exports;
   }
 })(this, function (_video) {
-  /*! videojs-markers - v1.0.1 - 2018-10-31
-  * Copyright (c) 2018 ; Licensed  */
+  /*! videojs-markers - v1.0.1 - 2020-07-10
+  * Copyright (c) 2020 ; Licensed  */
   'use strict';
 
   var _video2 = _interopRequireDefault(_video);
@@ -516,6 +516,7 @@
     };
   }
 
-  _video2.default.registerPlugin('markers', registerVideoJsMarkersPlugin);
+  var registerPlugin = _video2.default.registerPlugin || _video2.default.plugin;
+  registerPlugin('markers', registerVideoJsMarkersPlugin);
 });
 //# sourceMappingURL=videojs-markers.js.map
