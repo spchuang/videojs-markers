@@ -446,11 +446,10 @@ function registerVideoJsMarkersPlugin(options) {
     }
     onTimeUpdate();
     player.on("timeupdate", onTimeUpdate);
-    player.off("loadedmetadata");
   }
 
   // setup the plugin after we loaded video's meta data
-  player.on("loadedmetadata", function() {
+  player.one("loadedmetadata", function() {
     initialize();
   });
 
