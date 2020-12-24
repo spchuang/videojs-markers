@@ -73,6 +73,8 @@ npm run build
 
 
 ## History
+- 1.0.2
+   - Fixing issue #109
 - 1.0.1
    - fix /dist missing issue (issue 81)
 - 1.0.0

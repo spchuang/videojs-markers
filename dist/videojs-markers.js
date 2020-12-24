@@ -11,8 +11,8 @@
     global.videojsMarkers = mod.exports;
   }
 })(this, function (_video) {
-  /*! videojs-markers - v1.0.1 - 2018-02-03
-  * Copyright (c) 2018 ; Licensed  */
+  /*! videojs-markers - v1.0.1 - 2020-12-23
+  * Copyright (c) 2020 ; Licensed  */
   'use strict';
 
   var _video2 = _interopRequireDefault(_video);
@@ -440,11 +440,10 @@
       }
       onTimeUpdate();
       player.on("timeupdate", onTimeUpdate);
-      player.off("loadedmetadata");
     }
 
     // setup the plugin after we loaded video's meta data
-    player.on("loadedmetadata", function () {
+    player.one("loadedmetadata", function () {
       initialize();
     });
 
