@@ -65,14 +65,10 @@ The style of the markers could be modified by passing an optional setting "marke
 
 ## Development
 ```
-> git clone https://github.com/spchuang/videojs-markers
-> cd videojs-markers
-> npm install
-
-// compile js/css assets
-// install grunt: https://gruntjs.com/getting-started
-> npm install -g grunt-cli
-> grunt compile
+git clone https://github.com/spchuang/videojs-markers
+cd videojs-markers
+npm install
+npm run build
 ```
 
 
