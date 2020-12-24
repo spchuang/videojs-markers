@@ -126,9 +126,9 @@ function registerVideoJsMarkersPlugin(options) {
     videojs.mergeOptions = mergeOptions;
   }
 
-  if (!videojs.createEl) {
-    videojs.createEl = function(tagName: string, props: Object, attrs?: Object): void {
-      const el = videojs.Player.prototype.createEl(tagName, props);
+  if (!videojs.dom.createEl) {
+    videojs.dom.createEl = function(tagName: string, props: Object, attrs?: Object): void {
+      const el = videojs.Player.prototype.dom.createEl(tagName, props);
       if (!!attrs) {
         Object.keys(attrs).forEach(key => {
           el.setAttribute(key, attrs[key]);
@@ -137,7 +137,7 @@ function registerVideoJsMarkersPlugin(options) {
       return el;
     }
   }
-  
+
 
   /**
    * register the markers plugin (dependent on jquery)
@@ -198,12 +198,12 @@ function registerVideoJsMarkersPlugin(options) {
     } else {
       const markerDivBounding = getElementBounding(markerDiv);
       markerDiv.style.marginLeft = markerDivBounding.width / 2 + 'px';
-    }    
+    }
   }
 
   function createMarkerDiv(marker: Marker): Object {
 
-    var markerDiv = videojs.createEl('div', {}, {
+    var markerDiv = videojs.dom.createEl('div', {}, {
       'data-marker-key': marker.key,
       'data-marker-time': setting.markerTip.time(marker)
     });
@@ -282,12 +282,16 @@ function registerVideoJsMarkersPlugin(options) {
     markerDiv.addEventListener('mouseover', () => {
       var marker = markersMap[markerDiv.getAttribute('data-marker-key')];
       if (!!markerTip) {
-        markerTip.querySelector('.vjs-tip-inner').innerText = setting.markerTip.text(marker);
+        if (setting.markerTip.html) {
+          markerTip.querySelector('.vjs-tip-inner').innerHTML = setting.markerTip.html(marker);
+        } else {
+          markerTip.querySelector('.vjs-tip-inner').innerText = setting.markerTip.text(marker);
+        }
         // margin-left needs to minus the padding length to align correctly with the marker
         markerTip.style.left = getPosition(marker) + '%';
         var markerTipBounding = getElementBounding(markerTip);
         var markerDivBounding = getElementBounding(markerDiv);
-        markerTip.style.marginLeft = 
+        markerTip.style.marginLeft =
           -parseFloat(markerTipBounding.width / 2) + parseFloat(markerDivBounding.width / 4) + 'px';
         markerTip.style.visibility = 'visible';
       }
@@ -301,7 +305,7 @@ function registerVideoJsMarkersPlugin(options) {
   }
 
   function initializeMarkerTip(): void {
-    markerTip = videojs.createEl('div', {
+    markerTip = videojs.dom.createEl('div', {
       className: 'vjs-tip',
       innerHTML: "<div class='vjs-tip-arrow'></div><div class='vjs-tip-inner'></div>",
     });
@@ -342,7 +346,7 @@ function registerVideoJsMarkersPlugin(options) {
 
   // problem when the next marker is within the overlay display time from the previous marker
   function initializeOverlay(): void {
-    breakOverlay = videojs.createEl('div', {
+    breakOverlay = videojs.dom.createEl('div', {
       className: 'vjs-break-overlay',
       innerHTML: "<div class='vjs-break-overlay-text'></div>"
     });
@@ -513,4 +517,4 @@ function registerVideoJsMarkersPlugin(options) {
   };
 }
 
-videojs.plugin('markers', registerVideoJsMarkersPlugin);
+videojs.registerPlugin('markers', registerVideoJsMarkersPlugin);

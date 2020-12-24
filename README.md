@@ -1,3 +1,5 @@
+## Not actively maintained anymore. 
+
 Video.js Markers
 ===================
 ![Alt text](https://raw.github.com/spchuang/videojs-markers/master/screenshot.png "Screen shot of videojs.markers")

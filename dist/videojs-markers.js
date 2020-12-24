@@ -11,7 +11,7 @@
     global.videojsMarkers = mod.exports;
   }
 })(this, function (_video) {
-  /*! videojs-markers - v1.0.1 - 2020-12-23
+  /*! videojs-markers - v1.0.2 - 2020-12-23
   * Copyright (c) 2020 ; Licensed  */
   'use strict';
 
@@ -138,9 +138,9 @@
       _video2.default.mergeOptions = mergeOptions;
     }
 
-    if (!_video2.default.createEl) {
-      _video2.default.createEl = function (tagName, props, attrs) {
-        var el = _video2.default.Player.prototype.createEl(tagName, props);
+    if (!_video2.default.dom.createEl) {
+      _video2.default.dom.createEl = function (tagName, props, attrs) {
+        var el = _video2.default.Player.prototype.dom.createEl(tagName, props);
         if (!!attrs) {
           Object.keys(attrs).forEach(function (key) {
             el.setAttribute(key, attrs[key]);
@@ -214,7 +214,7 @@
 
     function createMarkerDiv(marker) {
 
-      var markerDiv = _video2.default.createEl('div', {}, {
+      var markerDiv = _video2.default.dom.createEl('div', {}, {
         'data-marker-key': marker.key,
         'data-marker-time': setting.markerTip.time(marker)
       });
@@ -293,7 +293,11 @@
       markerDiv.addEventListener('mouseover', function () {
         var marker = markersMap[markerDiv.getAttribute('data-marker-key')];
         if (!!markerTip) {
-          markerTip.querySelector('.vjs-tip-inner').innerText = setting.markerTip.text(marker);
+          if (setting.markerTip.html) {
+            markerTip.querySelector('.vjs-tip-inner').innerHTML = setting.markerTip.html(marker);
+          } else {
+            markerTip.querySelector('.vjs-tip-inner').innerText = setting.markerTip.text(marker);
+          }
           // margin-left needs to minus the padding length to align correctly with the marker
           markerTip.style.left = getPosition(marker) + '%';
           var markerTipBounding = getElementBounding(markerTip);
@@ -311,7 +315,7 @@
     }
 
     function initializeMarkerTip() {
-      markerTip = _video2.default.createEl('div', {
+      markerTip = _video2.default.dom.createEl('div', {
         className: 'vjs-tip',
         innerHTML: "<div class='vjs-tip-arrow'></div><div class='vjs-tip-inner'></div>"
       });
@@ -349,7 +353,7 @@
 
     // problem when the next marker is within the overlay display time from the previous marker
     function initializeOverlay() {
-      breakOverlay = _video2.default.createEl('div', {
+      breakOverlay = _video2.default.dom.createEl('div', {
         className: 'vjs-break-overlay',
         innerHTML: "<div class='vjs-break-overlay-text'></div>"
       });
@@ -511,6 +515,6 @@
     };
   }
 
-  _video2.default.plugin('markers', registerVideoJsMarkersPlugin);
+  _video2.default.registerPlugin('markers', registerVideoJsMarkersPlugin);
 });
 //# sourceMappingURL=videojs-markers.js.map
